@@ -1,0 +1,188 @@
+[
+  {
+      "filename": "africa.wav",
+      "name": "Africa",
+      "artist": "Toto",
+      "tempo": 92
+  },
+  {
+      "filename": "alone.wav",
+      "name": "Alone",
+      "artist": "Alan Walker",
+      "tempo": 97
+  },
+  {
+      "filename": "around_the_world.wav",
+      "name": "Around the World",
+      "artist": "ATC",
+      "tempo": 132
+  },
+  {
+      "filename": "baby_shark.wav",
+      "name": "Baby Shark",
+      "artist": "Pinkfong",
+      "tempo": 115
+  },
+  {
+      "filename": "believer.wav",
+      "name": "Believer",
+      "artist": "Imagine Dragons",
+      "tempo": 125
+  },
+  {
+      "filename": "beautiful_life.wav",
+      "name": "Beautiful Life",
+      "artist": "Ace of Base",
+      "tempo": 135
+  },
+  {
+      "filename": "call_me_maybe.wav",
+      "name": "Call Me Maybe",
+      "artist": "Carly Rae Jepsen",
+      "tempo": 120
+  },
+  {
+      "filename": "cant_stop_the_feeling.wav",
+      "name": "Can't Stop the Feeling!",
+      "artist": "Justin Timberlake",
+      "tempo": 113
+  },
+  {
+      "filename": "dont_speak.wav",
+      "name": "Don't Speak",
+      "artist": "No Doubt",
+      "tempo": 76
+  },
+  {
+      "filename": "evangeline.wav",
+      "name": "Evangeline",
+      "artist": "Matthew Sweet",
+      "tempo": 175
+  },
+  {
+      "filename": "faded.wav",
+      "name": "Faded",
+      "artist": "Alan Walker",
+      "tempo": 90
+  },
+  {
+      "filename": "firework.wav",
+      "name": "Firework",
+      "artist": "Katy Perry",
+      "tempo": 124
+  },
+  {
+      "filename": "hollaback_girl.wav",
+      "name": "Hollaback Girl",
+      "artist": "Gwen Stefani",
+      "tempo": 110
+  },
+  {
+      "filename": "i_ran_so_far_away.wav",
+      "name": "I Ran (So Far Away)",
+      "artist": "A Flock Of Seagulls",
+      "tempo": 146
+  },
+  {
+      "filename": "im_still_standing.wav",
+      "name": "I'm Still Standing",
+      "artist": "Elton John",
+      "tempo": 177
+  },
+  {
+      "filename": "its_my_life.wav",
+      "name": "It's My Life",
+      "artist": "Bon Jovi",
+      "tempo": 120
+  },
+  {
+      "filename": "love_you_like_a_love_song.wav",
+      "name": "Love You Like a Love Song",
+      "artist": "Selena Gomez",
+      "tempo": 117
+  },
+  {
+      "filename": "mambo_no_5.wav",
+      "name": "Mambo No. 5 (A Little Bit Of…)",
+      "artist": "Lou Bega",
+      "tempo": 174
+  },
+  {
+      "filename": "on_my_way.wav",
+      "name": "On My Way",
+      "artist": "Sabrina Carpenter, Alan Walker, Farruko",
+      "tempo": 170
+  },
+  {
+      "filename": "seven_nation_army.wav",
+      "name": "Seven Nation Army",
+      "artist": "The White Stripes",
+      "tempo": 124
+  },
+  {
+      "filename": "shake_it_off.wav",
+      "name": "Shake It Off",
+      "artist": "Taylor Swift",
+      "tempo": 160
+  },
+  {
+      "filename": "spark.wav",
+      "name": "Spark",
+      "artist": "Vexento",
+      "tempo": 117
+  },
+  {
+      "filename": "stereo_hearts.wav",
+      "name": "Stereo Hearts",
+      "artist": "Gym Class Heroes",
+      "tempo": 90
+  },
+  {
+      "filename": "temple_of_love.wav",
+      "name": "Temple of Love",
+      "artist": "The Sisters of Mercy",
+      "tempo": 166
+  },
+  {
+      "filename": "thunder.wav",
+      "name": "Thunder",
+      "artist": "Imagine Dragons",
+      "tempo": 168
+  },
+  {
+      "filename": "thunder2.wav",
+      "name": "Thunder",
+      "artist": "Gabry Ponte, Prezioso, LUM!X",
+      "tempo": 135
+  },
+  {
+      "filename": "uptown_funk.wav",
+      "name": "Uptown Funk",
+      "artist": "Mark Ronson, Bruno Mars",
+      "tempo": 115
+  },
+  {
+      "filename": "valhalla_calling_me.wav",
+      "name": "Valhalla Calling Me",
+      "artist": "Miracle of Sound",
+      "tempo": 152
+  },
+  {
+      "filename": "we_will_rock_you.wav",
+      "name": "We Will Rock You",
+      "artist": "Queen",
+      "tempo": 81
+  },
+  {
+      "filename": "without_you.wav",
+      "name": "Without You",
+      "artist": "Avicii",
+      "tempo": 134
+  },
+  {
+      "filename": "ymca.wav",
+      "name": "Y.M.C.A.",
+      "artist": "Village People",
+      "tempo": 127
+  }
+]
