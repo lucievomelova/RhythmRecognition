@@ -28,7 +28,8 @@ class FourierTempogram(Tempogram):
         :param frame_length: Number of samples in a frame
         :param hop_length: Number of samples by which we have to advance between two consecutive frames.
         """
-        super().__init__(novelty_function, similarity, number_of_dominant_values, lower_bound, upper_bound)
+        super().__init__(novelty_function, similarity, number_of_dominant_values, lower_bound, upper_bound,
+                         sampling_rate, hop_length, frame_length)
 
     def _analyze_tempo(self) -> None:
         super()._analyze_tempo()
