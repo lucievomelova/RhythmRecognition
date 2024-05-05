@@ -1,6 +1,6 @@
 import numpy as np
 import librosa
-from RhythmRecognition.onset.rmse import EnergyNovelty
+from RhythmRecognition.onset.energy import EnergyNovelty
 from RhythmRecognition.onset.spectral import SpectralNovelty
 from RhythmRecognition.tempo.fourier import FourierTempogram
 from RhythmRecognition.tempo.autocorrelation import AutocorrelationTempogram
