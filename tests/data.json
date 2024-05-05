@@ -24,16 +24,16 @@
       "tempo": 115
   },
   {
-      "filename": "believer.wav",
-      "name": "Believer",
-      "artist": "Imagine Dragons",
-      "tempo": 125
-  },
-  {
       "filename": "beautiful_life.wav",
       "name": "Beautiful Life",
       "artist": "Ace of Base",
       "tempo": 135
+  },
+  {
+      "filename": "believer.wav",
+      "name": "Believer",
+      "artist": "Imagine Dragons",
+      "tempo": 125
   },
   {
       "filename": "call_me_maybe.wav",
