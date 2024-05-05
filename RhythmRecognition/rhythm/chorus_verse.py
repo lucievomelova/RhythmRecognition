@@ -25,7 +25,11 @@ class ChorusVerseRhythmTracker(RhythmTracker):
                  beat_times: np.ndarray,
                  duration: float | None = None,
                  tolerance_interval: int = 20,
-                 alpha: float = 2):
+                 alpha: float = 2,
+                 sampling_rate: int = SAMPLING_RATE,
+                 hop_length: int = HOP_LENGTH,
+                 frame_length: int = FRAME_LENGTH,
+                 segment_length_sec: int = SEGMENT_LENGTH_SECONDS):
         """
         :param audiofile: Name of the audio file to be processed.
         :param novelty_function: Novelty function of the input audio signal.
@@ -34,13 +38,20 @@ class ChorusVerseRhythmTracker(RhythmTracker):
         :param beat_times: List of beat times.
         :param alpha: Parameter for peak picking specifying the ratio for how many peaks should be extracted
             from the novelty function. The base is (tempo/60) * duration.
+        :param sampling_rate: Defines the number of samples per second taken from a continuous signal
+         to make a discrete signal.
+        :param frame_length: Number of samples in a frame
+        :param hop_length: Number of samples by which we have to advance between two consecutive frames.
+        :param segment_length_sec: Length of segment for computing energy (in seconds).
         """
-        super().__init__(novelty_function, duration, tempo, beat_times, tolerance_interval, alpha)
-        self.signal, _ = librosa.load(audiofile, duration=duration, sr=SAMPLING_RATE)  # load the audiofile
+        super().__init__(novelty_function, duration, tempo, beat_times, tolerance_interval, alpha,
+                         sampling_rate, hop_length, frame_length)
+        self.signal, _ = librosa.load(audiofile, duration=duration, sr=self.sampling_rate)  # load the audiofile
+        self.segment_size = segment_length_sec*sampling_rate
 
     def compute_segment_rmse(self) -> np.ndarray:
         """Compute root-mean-square energy of on segment-level."""
-        return rmse(self.signal, SEGMENT_LENGTH, HOP_LENGTH)
+        return rmse(self.signal, self.segment_size, self.hop_length)
 
     def find_song_parts(self) -> np.ndarray:
         """Divide song int verse, chorus and other song parts.
@@ -54,10 +65,10 @@ class ChorusVerseRhythmTracker(RhythmTracker):
         part_transitions = [0]
         for i in range(max_parts):
             peak = np.argmax(rmse_diff)
-            rmse_diff[peak-(SAMPLING_RATE*10//HOP_LENGTH):peak+(SAMPLING_RATE*10//HOP_LENGTH)] = 0
+            rmse_diff[peak-(self.sampling_rate*10//self.hop_length):peak+(self.sampling_rate*10//self.hop_length)] = 0
             part_transitions.append(peak)
 
-        part_transitions = librosa.frames_to_time(part_transitions, sr=SAMPLING_RATE, hop_length=HOP_LENGTH)
+        part_transitions = librosa.frames_to_time(part_transitions, sr=self.sampling_rate, hop_length=self.hop_length)
         return np.array(part_transitions)
 
     def find_rhythmic_onsets(self) -> np.ndarray:

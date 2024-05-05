@@ -99,11 +99,9 @@ class BeatTracker:
         :param hop_length: Number of samples by which we have to advance between two consecutive frames.
         """
         self.novelty_function = novelty_function
-
         self.sampling_rate = sampling_rate
         self.frame_length = frame_length
         self.hop_length = hop_length
-
         self.len_frames = len(self.novelty_function)
         self.frame_times = librosa.frames_to_time(np.arange(len(self.novelty_function)),
                                                   sr=self.sampling_rate, hop_length=self.hop_length)

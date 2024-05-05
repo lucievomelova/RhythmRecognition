@@ -69,13 +69,25 @@ class RhythmTracker:
     rhythmic_onsets: np.ndarray
     """Note onset times that belong to some rhythmic pattern of the song."""
 
+    sampling_rate: int
+    """Defines the number of samples per second taken from a continuous signal to make a discrete signal."""
+
+    frame_length: int
+    """Number of samples in a frame."""
+
+    hop_length: int
+    """Number of samples by which we have to advance between two consecutive frames."""
+
     def __init__(self,
                  novelty_function: np.ndarray,
                  duration: float | None,
                  tempo: int,
                  beat_times: np.ndarray,
                  tolerance_interval: int = 10,
-                 alpha: float = 2):
+                 alpha: float = 2,
+                 sampling_rate: int = SAMPLING_RATE,
+                 hop_length: int = HOP_LENGTH,
+                 frame_length: int = FRAME_LENGTH):
         """
         :param novelty_function: Novelty function of the input audio signal.
         :param duration: Duration of the input song in seconds.
@@ -84,16 +96,23 @@ class RhythmTracker:
         :param tolerance_interval: Length of tolerance interval in milliseconds.
         :param alpha: Parameter for peak picking specifying the ratio for how many peaks should be extracted
             from the novelty function. The base is (tempo/60) * duration.
+        :param sampling_rate: Defines the number of samples per second taken from a continuous signal
+         to make a discrete signal.
+        :param frame_length: Number of samples in a frame
+        :param hop_length: Number of samples by which we have to advance between two consecutive frames.
         """
 
         self.novelty_function = novelty_function
+        self.sampling_rate = sampling_rate
+        self.frame_length = frame_length
+        self.hop_length = hop_length
         self.beat_times = beat_times
         self.len_frames = len(novelty_function)
         self.frame_times = librosa.frames_to_time(np.arange(len(self.novelty_function)),
-                                                  sr=SAMPLING_RATE, hop_length=HOP_LENGTH)
+                                                  sr=sampling_rate, hop_length=hop_length)
 
         if duration is None:
-            self.duration = self.len_frames * FRAME_LENGTH / (FRAME_LENGTH/HOP_LENGTH) / SAMPLING_RATE
+            self.duration = self.len_frames * frame_length / (frame_length/hop_length) / sampling_rate
         else:
             self.duration = duration
 
@@ -146,7 +165,7 @@ class RhythmTracker:
 
         return rhythmic_peaks_in_part
 
-    def _calculate_score(self, start_time_ms, end_time_ms) -> dict:
+    def _calculate_score(self, start_time_ms: float, end_time_ms: float) -> dict:
         """Calculate score for a part of the song specified by start time and end time.
 
         :param start_time_ms: Start time in milliseconds.
@@ -204,7 +223,7 @@ class RhythmTracker:
             scores[time] /= normalization
         return scores
 
-    def _dominant_time_shifts(self, start_time_ms: int, end_time_ms: int) -> list:
+    def _dominant_time_shifts(self, start_time_ms: float, end_time_ms: float) -> list:
         """Pick note onset time shifts with the highest scores in the given song part.
          Corresponding note onsets should belong to rhythmic note onsets.
 

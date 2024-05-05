@@ -1,5 +1,6 @@
 import numpy as np
 from RhythmRecognition.rhythm.rhythm_recognition import RhythmTracker
+from RhythmRecognition.constants import *
 
 
 class EqualPartsRhythmTracker(RhythmTracker):
@@ -20,7 +21,10 @@ class EqualPartsRhythmTracker(RhythmTracker):
                  duration: float | None = None,
                  tolerance_interval: int = 20,
                  alpha: float = 2,
-                 part_len: int = 20):
+                 part_len: int = 20,
+                 sampling_rate: int = SAMPLING_RATE,
+                 hop_length: int = HOP_LENGTH,
+                 frame_length: int = FRAME_LENGTH):
         """
         :param novelty_function: Novelty function of the input audio signal.
         :param duration: Duration of the input song in seconds.
@@ -30,8 +34,13 @@ class EqualPartsRhythmTracker(RhythmTracker):
             from the novelty function. The base is (tempo/60) * duration.
         :param part_len: Length of song part in seconds. Peak picking will be done on smaller parts
             of the song of the specified length.
+        :param sampling_rate: Defines the number of samples per second taken from a continuous signal
+         to make a discrete signal.
+        :param frame_length: Number of samples in a frame
+        :param hop_length: Number of samples by which we have to advance between two consecutive frames.
         """
-        super().__init__(novelty_function, duration, tempo, beat_times, tolerance_interval, alpha)
+        super().__init__(novelty_function, duration, tempo, beat_times, tolerance_interval, alpha,
+                         sampling_rate, hop_length, frame_length)
 
         self.part_len_seconds = part_len
 
