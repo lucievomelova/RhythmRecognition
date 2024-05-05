@@ -6,7 +6,7 @@ class PenaltyBeatTracker(BeatTracker):
     """Beat tracker based on scores with penalty.
      \n
      Beat tracking will be based trying out all possible time shifts and assigning score points to shifted time clicks.
-     But instead of simply awarding 0 or 1 score point, we will awards a number of points based on how far the closest
+     But instead of simply awarding 0 or 1 score point, we will award a number of points based on how far the closest
      note onset candidate is from current time click. The closer the candidate is, the more
      points it gets. To do that, we will use a penalty function.
      After trying all possible time shifts, we will choose time shift with the highest score.
