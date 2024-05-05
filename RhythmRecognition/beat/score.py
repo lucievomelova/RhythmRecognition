@@ -1,5 +1,6 @@
 import numpy as np
 from RhythmRecognition.beat.beat_tracker import BeatTracker
+from RhythmRecognition.constants import *
 
 
 class ScoreBeatTracker(BeatTracker):
@@ -21,7 +22,10 @@ class ScoreBeatTracker(BeatTracker):
                  tolerance_interval: int = 10,
                  alpha: float = 1.5,
                  part_len_seconds: int = 10,
-                 min_delta: int = 0.00001):
+                 min_delta: int = 0.00001,
+                 sampling_rate: int = SAMPLING_RATE,
+                 hop_length: int = HOP_LENGTH,
+                 frame_length: int = FRAME_LENGTH):
         """
         :param novelty_function: Novelty function of the input audio signal.
         :param tempo: Tempo (in BPM) of the input song.
@@ -34,8 +38,13 @@ class ScoreBeatTracker(BeatTracker):
         :param min_delta: Delta specifies the threshold for peak picking. Peak picking algorithm slowly makes delta
             smaller so that the correct number of peaks is extracted. When delta reaches min_delta, the algorithm
             ends even before finding the desired number of peaks.
+        :param sampling_rate: Defines the number of samples per second taken from a continuous signal
+         to make a discrete signal.
+        :param frame_length: Number of samples in a frame
+        :param hop_length: Number of samples by which we have to advance between two consecutive frames.
         """
-        super().__init__(novelty_function, tempo, duration, alpha, part_len_seconds, min_delta)
+        super().__init__(novelty_function, tempo, duration, alpha, part_len_seconds, min_delta,
+                         sampling_rate, hop_length, frame_length)
         self.tolerance = tolerance_interval
 
     def _get_score(self, shift_ms: int) -> int:

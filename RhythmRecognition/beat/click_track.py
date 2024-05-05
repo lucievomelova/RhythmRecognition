@@ -1,6 +1,5 @@
 import numpy as np
 import librosa.display
-from RhythmRecognition.constants import *
 
 """Click track generator."""
 
@@ -34,13 +33,16 @@ def get_click_times_sec(tempo, duration) -> np.ndarray:
     return np.array(click_times_arr)
 
 
-def get_click_times_frames(tempo, duration) -> np.ndarray | int:
+def get_click_times_frames(tempo, duration, sampling_rate, hop_length) -> np.ndarray | int:
     """Get click times in frames.
 
     :param tempo: Tempo in BPM.
     :param duration: Duration in seconds.
+    :param sampling_rate: Defines the number of samples per second taken from a continuous signal
+     to make a discrete signal.
+    :param hop_length: Number of samples by which we have to advance between two consecutive frames.
     :return: Click times (in frames).
     """
     click_times_sec = get_click_times_sec(tempo, duration)
-    frames = librosa.time_to_frames(click_times_sec, sr=SAMPLING_RATE, hop_length=HOP_LENGTH)
+    frames = librosa.time_to_frames(click_times_sec, sr=sampling_rate, hop_length=hop_length)
     return frames

@@ -63,13 +63,25 @@ class BeatTracker:
     peak_times: np.ndarray
     """Peak times in seconds."""
 
+    sampling_rate: int
+    """Defines the number of samples per second taken from a continuous signal to make a discrete signal."""
+
+    frame_length: int
+    """Number of samples in a frame."""
+
+    hop_length: int
+    """Number of samples by which we have to advance between two consecutive frames."""
+
     def __init__(self,
                  novelty_function: np.ndarray,
                  tempo: int,
                  duration: float | None,
                  alpha: float = 1.5,
                  part_len_seconds: int = 10,
-                 min_delta: int = 0.00001):
+                 min_delta: int = 0.00001,
+                 sampling_rate: int = SAMPLING_RATE,
+                 hop_length: int = HOP_LENGTH,
+                 frame_length: int = FRAME_LENGTH):
         """
         :param novelty_function: Novelty function of the input audio signal.
         :param tempo: Tempo (in BPM) of the input song.
@@ -81,11 +93,20 @@ class BeatTracker:
         :param min_delta: Delta specifies the threshold for peak picking. Peak picking algorithm slowly makes delta
             smaller so that the correct number of peaks is extracted. When delta reaches min_delta, the algorithm
             ends even before finding the desired number of peaks.
+        :param sampling_rate: Defines the number of samples per second taken from a continuous signal
+         to make a discrete signal.
+        :param frame_length: Number of samples in a frame
+        :param hop_length: Number of samples by which we have to advance between two consecutive frames.
         """
         self.novelty_function = novelty_function
+
+        self.sampling_rate = sampling_rate
+        self.frame_length = frame_length
+        self.hop_length = hop_length
+
         self.len_frames = len(self.novelty_function)
         self.frame_times = librosa.frames_to_time(np.arange(len(self.novelty_function)),
-                                                  sr=SAMPLING_RATE, hop_length=HOP_LENGTH)
+                                                  sr=self.sampling_rate, hop_length=self.hop_length)
 
         self.tempo = tempo
         self.period = 60/tempo
@@ -93,7 +114,7 @@ class BeatTracker:
         self.time_shift = 0
 
         if duration is None:
-            self.duration = self.len_frames * FRAME_LENGTH / (FRAME_LENGTH/HOP_LENGTH) / SAMPLING_RATE
+            self.duration = self.len_frames * frame_length / (frame_length/hop_length) / sampling_rate
         else:
             self.duration = duration
         self.part_len_seconds = part_len_seconds
@@ -101,6 +122,7 @@ class BeatTracker:
 
         self.click_times_sec = get_click_times_sec(self.tempo, self.duration)
         self._find_peaks()
+
 
     def _calc_min_number_of_peaks(self) -> int:
         """Calculate minimum number of peaks that should be picked, so we have a higher chance
