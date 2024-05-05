@@ -320,15 +320,15 @@ def rhythm_track(audiofile: str,
         bpm = tempo(audiofile, tempo_approach, novelty_approach, duration, novelty_gamma,
                   similarity_tempo, number_of_dominant_values_tempo, lower_bound, upper_bound)
     beats = beat_track(audiofile, beat_approach, tempo_approach, novelty_approach,
-                       duration, novelty_gamma,
+                       duration, novelty_gamma, None,
                        similarity_tempo, number_of_dominant_values_tempo, lower_bound, upper_bound,
                        tolerance_beat, alpha_beat, part_len_seconds_beat, min_delta)
 
     if approach == "parts":
-        rhythm_tracker = EqualPartsRhythmTracker(novelty, duration, bpm, beats,
+        rhythm_tracker = EqualPartsRhythmTracker(novelty, bpm, beats, duration,
                                                  tolerance_interval, alpha, part_len_seconds)
     elif approach == "chorus-verse":
-        rhythm_tracker = ChorusVerseRhythmTracker(audiofile, novelty, duration, bpm, beats, tolerance_interval, alpha)
+        rhythm_tracker = ChorusVerseRhythmTracker(audiofile, novelty, bpm, beats, duration, tolerance_interval, alpha)
 
     else:
         raise Exception("Invalid rhythm tracking approach, options are: " + str(RHYTHM))

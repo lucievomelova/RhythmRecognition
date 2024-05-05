@@ -14,19 +14,28 @@ class EnergyNovelty(NoveltyFunction):
     rmse: np.ndarray
     """Root-mean-square energy of the input signal."""
 
-    def __init__(self, audiofile, duration=None, gamma=10):
+    def __init__(self, audiofile: str,
+                 duration: float | None = None,
+                 gamma: int = 10,
+                 sampling_rate: int = SAMPLING_RATE,
+                 hop_length: int = HOP_LENGTH,
+                 frame_length: int = FRAME_LENGTH):
         """
         :param audiofile: Name of the audio file to be processed.
         :param duration: Duration of the song in seconds. Only specify this parameter if you need to use a smaller
             part of the song. If not specified, it is set to the whole song duration.
         :param gamma: Compression factor for logarithmic compression.
+        :param sampling_rate: Defines the number of samples per second taken from a continuous signal
+         to make a discrete signal.
+        :param frame_length: Number of samples in a frame
+        :param hop_length: Number of samples by which we have to advance between two consecutive frames.
         """
 
-        super().__init__(audiofile, duration, gamma)
+        super().__init__(audiofile, duration, gamma, sampling_rate, hop_length, frame_length)
 
     def __compute_rmse(self) -> None:
         """Compute root-mean-square energy of the input signal."""
-        self.rmse = rmse(self.signal, FRAME_LENGTH, HOP_LENGTH)
+        self.rmse = rmse(self.signal, self.frame_length, self.hop_length)
 
     def _compute(self) -> None:
         self.__compute_rmse()
