@@ -17,7 +17,7 @@ class ScoreBeatTracker(BeatTracker):
     def __init__(self,
                  novelty_function: np.ndarray,
                  tempo: int,
-                 duration: float,
+                 duration: float | None = None,
                  tolerance_interval: int = 10,
                  alpha: float = 1.5,
                  part_len_seconds: int = 10,

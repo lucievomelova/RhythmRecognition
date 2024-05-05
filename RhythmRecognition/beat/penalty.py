@@ -15,7 +15,7 @@ class PenaltyBeatTracker(BeatTracker):
     def __init__(self,
                  novelty_function: np.ndarray,
                  tempo: int,
-                 duration: float,
+                 duration: float | None = None,
                  alpha: float = 1.5,
                  part_len_seconds: int = 10,
                  min_delta: int = 0.00001):

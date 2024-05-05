@@ -21,9 +21,9 @@ class ChorusVerseRhythmTracker(RhythmTracker):
     def __init__(self,
                  audiofile: str,
                  novelty_function: np.ndarray,
-                 duration: float,
                  tempo: int,
                  beat_times: np.ndarray,
+                 duration: float | None = None,
                  tolerance_interval: int = 20,
                  alpha: float = 2):
         """

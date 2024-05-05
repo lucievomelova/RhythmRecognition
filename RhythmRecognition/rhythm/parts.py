@@ -15,9 +15,9 @@ class EqualPartsRhythmTracker(RhythmTracker):
 
     def __init__(self,
                  novelty_function: np.ndarray,
-                 duration: float,
                  tempo: int,
                  beat_times: np.ndarray,
+                 duration: float | None = None,
                  tolerance_interval: int = 20,
                  alpha: float = 2,
                  part_len: int = 20):

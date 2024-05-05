@@ -71,7 +71,7 @@ class RhythmTracker:
 
     def __init__(self,
                  novelty_function: np.ndarray,
-                 duration: float,
+                 duration: float | None,
                  tempo: int,
                  beat_times: np.ndarray,
                  tolerance_interval: int = 10,
@@ -91,7 +91,12 @@ class RhythmTracker:
         self.len_frames = len(novelty_function)
         self.frame_times = librosa.frames_to_time(np.arange(len(self.novelty_function)),
                                                   sr=SAMPLING_RATE, hop_length=HOP_LENGTH)
-        self.duration = duration
+
+        if duration is None:
+            self.duration = self.len_frames * FRAME_LENGTH / (FRAME_LENGTH/HOP_LENGTH) / SAMPLING_RATE
+        else:
+            self.duration = duration
+
         self.tolerance = tolerance_interval
         self.tempo = tempo
         self.period = 60/tempo

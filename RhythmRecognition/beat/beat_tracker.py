@@ -66,7 +66,7 @@ class BeatTracker:
     def __init__(self,
                  novelty_function: np.ndarray,
                  tempo: int,
-                 duration: float,
+                 duration: float | None,
                  alpha: float = 1.5,
                  part_len_seconds: int = 10,
                  min_delta: int = 0.00001):
@@ -91,7 +91,11 @@ class BeatTracker:
         self.period = 60/tempo
         self.alpha = alpha
         self.time_shift = 0
-        self.duration = duration
+
+        if duration is None:
+            self.duration = self.len_frames * FRAME_LENGTH / (FRAME_LENGTH/HOP_LENGTH) / SAMPLING_RATE
+        else:
+            self.duration = duration
         self.part_len_seconds = part_len_seconds
         self.min_delta = min_delta
 
