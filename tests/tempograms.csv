@@ -1,0 +1,32 @@
+,filename,name,artist,tempo,fourier-spectral,autocorrelation-spectral,hybrid-spectral,fourier-energy,autocorrelation-energy,hybrid-energy
+0,africa.wav,Africa,Toto,92,185,178,185,93,91,92
+1,alone.wav,Alone,Alan Walker,97,194,43,193,194,48,193
+2,around_the_world.wav,Around the World,ATC,132,132,129,130,132,129,130
+3,baby_shark.wav,Baby Shark,Pinkfong,115,115,112,113,115,57,114
+4,beautiful_life.wav,Beautiful Life,Ace of Base,135,152,76,151,135,133,151
+5,believer.wav,Believer,Imagine Dragons,125,125,62,126,125,62,61
+6,call_me_maybe.wav,Call Me Maybe,Carly Rae Jepsen,120,182,117,184,120,117,121
+7,cant_stop_the_feeling.wav,Can't Stop the Feeling!,Justin Timberlake,113,113,56,113,113,56,113
+8,dont_speak.wav,Don't Speak,No Doubt,76,152,148,151,76,75,75
+9,evangeline.wav,Evangeline,Matthew Sweet,175,175,87,176,175,172,175
+10,faded.wav,Faded,Alan Walker,90,180,172,181,180,172,180
+11,firework.wav,Firework,Katy Perry,124,124,41,125,124,61,92
+12,hollaback_girl.wav,Hollaback Girl,Gwen Stefani,110,165,54,163,83,87,82
+13,i_ran_so_far_away.wav,I Ran (So Far Away),A Flock Of Seagulls,146,146,144,145,146,143,145
+14,im_still_standing.wav,I'm Still Standing,Elton John,177,178,172,177,178,172,177
+15,its_my_life.wav,It's My Life,Bon Jovi,120,120,117,120,120,117,119
+16,love_you_like_a_love_song.wav,Love You Like a Love Song,Selena Gomez,117,117,115,126,117,115,118
+17,mambo_no_5.wav,Mambo No. 5,Lou Bega,174,174,43,174,174,43,173
+18,on_my_way.wav,On My Way,"Sabrina Carpenter, Alan Walker, Farruko",170,128,83,127,127,84,85
+19,seven_nation_army.wav,Seven Nation Army,The White Stripes,124,124,121,124,123,121,123
+20,shake_it_off.wav,Shake It Off,Taylor Swift,160,160,53,159,120,63,199
+21,spark.wav,Spark,Vexento,117,117,115,118,117,115,118
+22,stereo_hearts.wav,Stereo Hearts,Gym Class Heroes,90,180,45,181,180,45,180
+23,temple_of_love.wav,Temple of Love,The Sisters of Mercy,166,166,161,167,166,161,167
+24,thunder.wav,Thunder,Imagine Dragons,168,168,83,126,105,42,126
+25,thunder2.wav,Thunder,"Gabry Ponte, Prezioso, LUM!X",135,135,45,134,135,133,134
+26,uptown_funk.wav,Uptown Funk,"Mark Ronson, Bruno Mars",115,115,48,113,115,57,114
+27,valhalla_calling_me.wav,Valhalla Calling Me,Miracle of Sound,152,152,148,151,152,99,151
+28,we_will_rock_you.wav,We Will Rock You,Queen,81,163,80,81,163,80,162
+29,without_you.wav,Without You,Avicii,134,134,88,134,134,131,134
+30,ymca.wav,Y.M.C.A.,Village People,127,127,124,172,127,124,127
