@@ -1,4 +1,5 @@
 import numpy as np
+from RhythmRecognition.constants import *
 
 
 class Tempogram:
@@ -34,14 +35,33 @@ class Tempogram:
     upper_bound: int
     """Highest possible BPM value that will be considered in tempo analysis."""
 
-    def __init__(self, novelty_function: np.ndarray, similarity: int = 5, number_of_dominant_values: int = 5,
-                 lower_bound: int = 40, upper_bound: int = 200):
+    sampling_rate: int
+    """Defines the number of samples per second taken from a continuous signal to make a discrete signal."""
+
+    frame_length: int
+    """Number of samples in a frame."""
+
+    hop_length: int
+    """Number of samples by which we have to advance between two consecutive frames."""
+
+    def __init__(self, novelty_function: np.ndarray,
+                 similarity: int = 5,
+                 number_of_dominant_values: int = 5,
+                 lower_bound: int = 40,
+                 upper_bound: int = 200,
+                 sampling_rate: int = SAMPLING_RATE,
+                 hop_length: int = HOP_LENGTH,
+                 frame_length: int = FRAME_LENGTH):
         """
         :param novelty_function: Novelty function of the input audio signal.
         :param similarity: BPM tolerance that specifies which BPM values belong to the same group.
         :param number_of_dominant_values: How many dominant BPM values should be extracted for later computations.
         :param lower_bound: Lowest possible BPM value that will be considered.
         :param upper_bound: Highest possible BPM value that will be considered.
+        :param sampling_rate: Defines the number of samples per second taken from a continuous signal
+         to make a discrete signal.
+        :param frame_length: Number of samples in a frame
+        :param hop_length: Number of samples by which we have to advance between two consecutive frames.
         """
         self.novelty_function = novelty_function
         self.similarity = similarity
@@ -51,6 +71,9 @@ class Tempogram:
         self.tempo = None
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
+        self.sampling_rate = sampling_rate
+        self.frame_length = frame_length
+        self.hop_length = hop_length
 
     def _group_similar_bpms(self, bpm_list: []) -> dict:
         """Group similar BPM values together, because there is a high chance that they represent the same
