@@ -1,5 +1,5 @@
 import numpy as np
-from RhythmRecognition.rhythm.rhythm_recognition import RhythmTracker
+from RhythmRecognition.rhythm.rhythm_tracker import RhythmTracker
 from RhythmRecognition.constants import *
 
 

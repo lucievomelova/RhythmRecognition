@@ -50,10 +50,10 @@ class NoveltyFunction:
 
         # set duration to whole song duration if not specified
         if duration is None:
-            self.signal, sr = librosa.load(audiofile, sr=SAMPLING_RATE)  # load the audiofile
-            self.duration = librosa.get_duration(y=self.signal, sr=SAMPLING_RATE)
+            self.signal, sr = librosa.load(audiofile, sr=sampling_rate)  # load the audiofile
+            self.duration = librosa.get_duration(y=self.signal, sr=sampling_rate)
         else:
-            self.signal, sr = librosa.load(audiofile, duration=duration, sr=SAMPLING_RATE)  # load the audiofile
+            self.signal, sr = librosa.load(audiofile, duration=duration, sr=sampling_rate)  # load the audiofile
             self.duration = duration
         self.novelty_function = None
         self.len_frames = None
