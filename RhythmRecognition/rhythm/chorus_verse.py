@@ -26,6 +26,7 @@ class ChorusVerseRhythmTracker(RhythmTracker):
                  duration: float | None = None,
                  tolerance_interval: int = 20,
                  alpha: float = 2,
+                 num_rhythmic_onsets: int = 4,
                  sampling_rate: int = SAMPLING_RATE,
                  hop_length: int = HOP_LENGTH,
                  frame_length: int = FRAME_LENGTH,
@@ -38,13 +39,15 @@ class ChorusVerseRhythmTracker(RhythmTracker):
         :param beat_times: List of beat times.
         :param alpha: Parameter for peak picking specifying the ratio for how many peaks should be extracted
             from the novelty function. The base is (tempo/60) * duration.
+        :param num_rhythmic_onsets: Number that specifies how many groups of note onsets with high score should be
+         put in the rhythm track.
         :param sampling_rate: Defines the number of samples per second taken from a continuous signal
          to make a discrete signal.
         :param frame_length: Number of samples in a frame
         :param hop_length: Number of samples by which we have to advance between two consecutive frames.
         :param segment_length_sec: Length of segment for computing energy (in seconds).
         """
-        super().__init__(novelty_function, duration, tempo, beat_times, tolerance_interval, alpha,
+        super().__init__(novelty_function, duration, tempo, beat_times, tolerance_interval, alpha, num_rhythmic_onsets,
                          sampling_rate, hop_length, frame_length)
         self.signal, _ = librosa.load(audiofile, duration=duration, sr=self.sampling_rate)  # load the audiofile
         self.segment_size = segment_length_sec*sampling_rate

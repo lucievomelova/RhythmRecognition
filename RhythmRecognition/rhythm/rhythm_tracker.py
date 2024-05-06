@@ -78,6 +78,9 @@ class RhythmTracker:
     hop_length: int
     """Number of samples by which we have to advance between two consecutive frames."""
 
+    num_rhythmic_onsets: int
+    """Number that specifies how many groups of note onsets with high score should be put in the rhythm track."""
+
     def __init__(self,
                  novelty_function: np.ndarray,
                  duration: float | None,
@@ -85,6 +88,7 @@ class RhythmTracker:
                  beat_times: np.ndarray,
                  tolerance_interval: int = 10,
                  alpha: float = 2,
+                 num_rhythmic_onsets: int = 4,
                  sampling_rate: int = SAMPLING_RATE,
                  hop_length: int = HOP_LENGTH,
                  frame_length: int = FRAME_LENGTH):
@@ -96,6 +100,8 @@ class RhythmTracker:
         :param tolerance_interval: Length of tolerance interval in milliseconds.
         :param alpha: Parameter for peak picking specifying the ratio for how many peaks should be extracted
             from the novelty function. The base is (tempo/60) * duration.
+        :param num_rhythmic_onsets: Number that specifies how many groups of note onsets with high score should be
+         put in the rhythm track.
         :param sampling_rate: Defines the number of samples per second taken from a continuous signal
          to make a discrete signal.
         :param frame_length: Number of samples in a frame
@@ -120,6 +126,7 @@ class RhythmTracker:
         self.tempo = tempo
         self.period = 60/tempo
         self.alpha = alpha
+        self.num_rhythmic_onsets = num_rhythmic_onsets
         self._find_peaks()
 
     def _find_peaks(self) -> None:
@@ -236,7 +243,7 @@ class RhythmTracker:
         if score == {}:
             return []
         shifts = []
-        for i in range(4):
+        for i in range(self.num_rhythmic_onsets):
             shifts.append(max(score.items(), key=lambda k: k[1]))
             time = shifts[i][0]
             for j in range(time - self.tolerance, time + self.tolerance):

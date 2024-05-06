@@ -21,6 +21,7 @@ class EqualPartsRhythmTracker(RhythmTracker):
                  duration: float | None = None,
                  tolerance_interval: int = 20,
                  alpha: float = 2,
+                 num_rhythmic_onsets: int = 4,
                  part_len: int = 20,
                  sampling_rate: int = SAMPLING_RATE,
                  hop_length: int = HOP_LENGTH,
@@ -34,12 +35,14 @@ class EqualPartsRhythmTracker(RhythmTracker):
             from the novelty function. The base is (tempo/60) * duration.
         :param part_len: Length of song part in seconds. Peak picking will be done on smaller parts
             of the song of the specified length.
+        :param num_rhythmic_onsets: Number that specifies how many groups of note onsets with high score should be
+         put in the rhythm track.
         :param sampling_rate: Defines the number of samples per second taken from a continuous signal
          to make a discrete signal.
         :param frame_length: Number of samples in a frame
         :param hop_length: Number of samples by which we have to advance between two consecutive frames.
         """
-        super().__init__(novelty_function, duration, tempo, beat_times, tolerance_interval, alpha,
+        super().__init__(novelty_function, duration, tempo, beat_times, tolerance_interval, alpha, num_rhythmic_onsets,
                          sampling_rate, hop_length, frame_length)
 
         self.part_len_seconds = part_len

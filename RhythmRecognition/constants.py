@@ -5,7 +5,7 @@ FRAME_LENGTH = 2048
 """**Frame length** specifies the number of samples in a frame.
 The input signal is cut into smaller frames (of this size) and calculations are done over them."""
 
-HOP_LENGTH = 1024
+HOP_LENGTH = 512
 """**Hop length** refers to the number of samples by which we have to advance between two consecutive frames. 
 In other words, it determines the overlap between frames."""
 
@@ -19,3 +19,6 @@ SEGMENT_LENGTH_SECONDS = 8
 
 SEGMENT_LENGTH = SAMPLING_RATE * SEGMENT_LENGTH_SECONDS
 """Length of segment in frames for calculating segment-level features."""
+
+WIN_LENGTH = 1024
+"""Window length used in autocorrelation tempogram."""

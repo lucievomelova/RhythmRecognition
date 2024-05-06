@@ -41,7 +41,7 @@ class FourierTempogram(Tempogram):
         self.tempo = self._find_dominant_BPM(max_bpms)
 
     def _compute_tempogram(self) -> None:
-        stft_spectral = librosa.stft(self.novelty_function, n_fft=self.frame_length*2, hop_length=1,
+        stft_spectral = librosa.stft(self.novelty_function, n_fft=self.frame_length, hop_length=1,
                                      win_length=self.frame_length)
         
         self.tempogram = np.abs(stft_spectral)
