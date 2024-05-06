@@ -5,7 +5,9 @@ tempo analysis, beat detection and rhythm detection. Each step has a separate su
 showing one of the described approaches. 
 
 ### Song used in the examples
-The song that is used in all of the notebooks is Spark by Vexento (album Vexento - Electronic Gaming Music Mix).
+The song that is used in all of the notebooks is:
+
+Vexento "Spark", Vexento - Electronic Gaming Music Mix, 2018, https://soundcloud.com/officialncvm/vexento-spark
 
 ### Other songs
 If you want to try other songs, simply add the desired file to the `audio_files/` directory and then specify 
