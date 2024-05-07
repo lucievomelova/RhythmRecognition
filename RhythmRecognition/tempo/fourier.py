@@ -25,7 +25,7 @@ class FourierTempogram(Tempogram):
         :param upper_bound: Highest possible BPM value that will be considered.
         :param sampling_rate: Defines the number of samples per second taken from a continuous signal
          to make a discrete signal.
-        :param frame_length: Number of samples in a frame
+        :param frame_length: Number of samples in a frame.
         :param hop_length: Number of samples by which we have to advance between two consecutive frames.
         """
         super().__init__(novelty_function, similarity, number_of_dominant_values, lower_bound, upper_bound,
@@ -41,7 +41,7 @@ class FourierTempogram(Tempogram):
         self.tempo = self._find_dominant_BPM(max_bpms)
 
     def _compute_tempogram(self) -> None:
-        stft_spectral = librosa.stft(self.novelty_function, n_fft=self.frame_length, hop_length=1,
+        stft_spectral = librosa.stft(self.novelty_function, n_fft=self.frame_length*2, hop_length=1,
                                      win_length=self.frame_length)
         
         self.tempogram = np.abs(stft_spectral)

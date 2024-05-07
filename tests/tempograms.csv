@@ -1,32 +1,32 @@
 name,artist,tempo,fourier-energy,autocorrelation-energy,fourier-spectral,autocorrelation-spectral
-Africa,Toto,92,185,46,185,91
+Africa,Toto,92,92,46,185,91
 Alone,Alan Walker,97,194,48,194,185
 Around the World,ATC,132,132,128,132,129
 Baby Shark,Pinkfong,115,115,113,115,112
-Beautiful Life,Ace of Base,135,135,131,135,67
-Believer,Imagine Dragons,125,187,122,187,122
-Call Me Maybe,Carly Rae Jepsen,120,60,117,120,117
+Beautiful Life,Ace of Base,135,135,131,152,67
+Believer,Imagine Dragons,125,125,122,125,122
+Call Me Maybe,Carly Rae Jepsen,120,120,117,180,117
 Can't Stop the Feeling!,Justin Timberlake,113,113,111,113,111
-Don't Speak,No Doubt,76,152,100,152,75
+Don't Speak,No Doubt,76,76,100,152,75
 Evangeline,Matthew Sweet,175,175,86,175,87
-Faded,Alan Walker,90,90,88,180,89
+Faded,Alan Walker,90,180,88,180,89
 Firework,Katy Perry,124,124,121,124,121
-Hollaback Girl,Gwen Stefani,110,110,72,110,72
-I Ran (So Far Away),A Flock Of Seagulls,146,146,143,146,142
+Hollaback Girl,Gwen Stefani,110,82,72,165,72
+I Ran (So Far Away),A Flock Of Seagulls,146,147,143,146,142
 I'm Still Standing,Elton John,177,178,87,178,87
 It's My Life,Bon Jovi,120,120,59,120,117
 Love You Like a Love Song,Selena Gomez,117,117,114,117,114
-Mambo No. 5 (A Little Bit Ofâ€¦),Lou Bega,174,174,86,174,167
-On My Way,"Sabrina Carpenter, Alan Walker, Farruko",170,170,42,170,42
-Seven Nation Army,The White Stripes,124,62,121,124,61
-Shake It Off,Taylor Swift,160,160,105,160,79
+Mambo No. 5,Lou Bega,174,174,86,174,167
+On My Way,"Sabrina Carpenter, Alan Walker, Farruko",170,127,42,128,42
+Seven Nation Army,The White Stripes,124,123,121,124,61
+Shake It Off,Taylor Swift,160,120,105,160,79
 Spark,Vexento,117,117,115,117,58
 Stereo Hearts,Gym Class Heroes,90,180,89,180,45
 Temple of Love,The Sisters of Mercy,166,166,82,166,82
-Thunder,Imagine Dragons,168,168,55,168,42
+Thunder,Imagine Dragons,168,105,55,168,42
 Thunder,"Gabry Ponte, Prezioso, LUM!X",135,135,131,135,133
 Uptown Funk,"Mark Ronson, Bruno Mars",115,115,113,115,113
 Valhalla Calling Me,Miracle of Sound,152,152,149,152,75
-We Will Rock You,Queen,81,81,40,163,40
+We Will Rock You,Queen,81,163,40,163,40
 Without You,Avicii,134,134,131,134,131
 Y.M.C.A.,Village People,127,127,124,127,63

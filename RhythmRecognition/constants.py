@@ -16,7 +16,6 @@ make a discrete signal. This sampling rate (so 44.1 kHz) is the standard samplin
 SEGMENT_LENGTH_SECONDS = 8
 """Length of segment in seconds for calculating segment-level features."""
 
-
 SEGMENT_LENGTH = SAMPLING_RATE * SEGMENT_LENGTH_SECONDS
 """Length of segment in frames for calculating segment-level features."""
 

@@ -60,7 +60,7 @@ class Tempogram:
         :param upper_bound: Highest possible BPM value that will be considered.
         :param sampling_rate: Defines the number of samples per second taken from a continuous signal
          to make a discrete signal.
-        :param frame_length: Number of samples in a frame
+        :param frame_length: Number of samples in a frame.
         :param hop_length: Number of samples by which we have to advance between two consecutive frames.
         """
         self.novelty_function = novelty_function

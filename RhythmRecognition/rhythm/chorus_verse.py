@@ -43,7 +43,7 @@ class ChorusVerseRhythmTracker(RhythmTracker):
          put in the rhythm track.
         :param sampling_rate: Defines the number of samples per second taken from a continuous signal
          to make a discrete signal.
-        :param frame_length: Number of samples in a frame
+        :param frame_length: Number of samples in a frame.
         :param hop_length: Number of samples by which we have to advance between two consecutive frames.
         :param segment_length_sec: Length of segment for computing energy (in seconds).
         """
@@ -68,7 +68,9 @@ class ChorusVerseRhythmTracker(RhythmTracker):
         part_transitions = [0]
         for i in range(max_parts):
             peak = np.argmax(rmse_diff)
-            rmse_diff[peak-(self.sampling_rate*10//self.hop_length):peak+(self.sampling_rate*10//self.hop_length)] = 0
+
+            # make area around a transition 0, so that there is not another peak detected close to this one
+            rmse_diff[peak-(self.sampling_rate*15//self.hop_length):peak+(self.sampling_rate*15//self.hop_length)] = 0
             part_transitions.append(peak)
 
         part_transitions = librosa.frames_to_time(part_transitions, sr=self.sampling_rate, hop_length=self.hop_length)
