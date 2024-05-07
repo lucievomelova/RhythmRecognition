@@ -45,6 +45,9 @@
             <li>
                     <a class="variable" href="#SEGMENT_LENGTH">SEGMENT_LENGTH</a>
             </li>
+            <li>
+                    <a class="variable" href="#WIN_LENGTH">WIN_LENGTH</a>
+            </li>
     </ul>
 
 
@@ -75,7 +78,7 @@
 </span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="sd">&quot;&quot;&quot;**Frame length** specifies the number of samples in a frame.</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">The input signal is cut into smaller frames (of this size) and calculations are done over them.&quot;&quot;&quot;</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="n">HOP_LENGTH</span> <span class="o">=</span> <span class="mi">1024</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="n">HOP_LENGTH</span> <span class="o">=</span> <span class="mi">512</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">&quot;&quot;&quot;**Hop length** refers to the number of samples by which we have to advance between two consecutive frames. </span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">In other words, it determines the overlap between frames.&quot;&quot;&quot;</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
@@ -86,9 +89,11 @@
 </span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="n">SEGMENT_LENGTH_SECONDS</span> <span class="o">=</span> <span class="mi">8</span>
 </span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="sd">&quot;&quot;&quot;Length of segment in seconds for calculating segment-level features.&quot;&quot;&quot;</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="n">SEGMENT_LENGTH</span> <span class="o">=</span> <span class="n">SAMPLING_RATE</span> <span class="o">*</span> <span class="n">SEGMENT_LENGTH_SECONDS</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="sd">&quot;&quot;&quot;Length of segment in frames for calculating segment-level features.&quot;&quot;&quot;</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="n">SEGMENT_LENGTH</span> <span class="o">=</span> <span class="n">SAMPLING_RATE</span> <span class="o">*</span> <span class="n">SEGMENT_LENGTH_SECONDS</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="sd">&quot;&quot;&quot;Length of segment in frames for calculating segment-level features.&quot;&quot;&quot;</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="n">WIN_LENGTH</span> <span class="o">=</span> <span class="mi">1024</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="sd">&quot;&quot;&quot;Window length used in autocorrelation tempogram.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -111,7 +116,7 @@ The input signal is cut into smaller frames (of this size) and calculations are 
                 <section id="HOP_LENGTH">
                     <div class="attr variable">
             <span class="name">HOP_LENGTH</span>        =
-<span class="default_value">1024</span>
+<span class="default_value">512</span>
 
         
     </div>
@@ -162,6 +167,20 @@ make a discrete signal. This sampling rate (so 44.1 kHz) is the standard samplin
     <a class="headerlink" href="#SEGMENT_LENGTH"></a>
     
             <div class="docstring"><p>Length of segment in frames for calculating segment-level features.</p>
+</div>
+
+
+                </section>
+                <section id="WIN_LENGTH">
+                    <div class="attr variable">
+            <span class="name">WIN_LENGTH</span>        =
+<span class="default_value">1024</span>
+
+        
+    </div>
+    <a class="headerlink" href="#WIN_LENGTH"></a>
+    
+            <div class="docstring"><p>Window length used in autocorrelation tempogram.</p>
 </div>
 
 

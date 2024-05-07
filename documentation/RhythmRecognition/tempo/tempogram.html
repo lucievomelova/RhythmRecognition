@@ -61,6 +61,15 @@
                                 <a class="variable" href="#Tempogram.upper_bound">upper_bound</a>
                         </li>
                         <li>
+                                <a class="variable" href="#Tempogram.sampling_rate">sampling_rate</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Tempogram.frame_length">frame_length</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Tempogram.hop_length">hop_length</a>
+                        </li>
+                        <li>
                                 <a class="function" href="#Tempogram.get_tempogram">get_tempogram</a>
                         </li>
                         <li>
@@ -91,154 +100,177 @@
                         <label class="view-source-button" for="mod-tempogram-view-source"><span>View Source</span></label>
 
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a>
+</span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a><span class="kn">from</span> <span class="nn">RhythmRecognition.constants</span> <span class="kn">import</span> <span class="o">*</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="k">class</span> <span class="nc">Tempogram</span><span class="p">:</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for specific tempogram implementations.</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="sd">    \n</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="sd">    A **tempogram** indicates specific tempo relevance for each time instance in a song.</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="sd">    Only an interval of reasonable tempi should be considered for tempo analysis, as too high values</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="sd">    or too small values do not really make sense in terms of musical tempo analysis.</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="sd">    \n</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="sd">    We assume that the input songs have constant tempo and the BPM value is an integer.&quot;&quot;&quot;</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a>
-</span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a>    <span class="n">novelty_function</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Novelty function of the input audio signal.&quot;&quot;&quot;</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a>
-</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a>    <span class="n">similarity</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;BPM tolerance that specifies which BPM values belong to the same group.&quot;&quot;&quot;</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a>
-</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a>    <span class="n">number_of_dominant_values</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;How many dominant BPM values should be extracted for later computations.&quot;&quot;&quot;</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a>
-</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a>    <span class="n">tempogram</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Tempogram of the input audio file. &quot;&quot;&quot;</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>
-</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>    <span class="n">bpm_values</span><span class="p">:</span> <span class="p">[]</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;List of dominant BPM values.&quot;&quot;&quot;</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>
-</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>    <span class="n">tempo</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;The most dominant BPM value that should indicate tempo of the song.&quot;&quot;&quot;</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a>
-</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a>    <span class="n">lower_bound</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Lowest possible BPM value that will be considered in tempo analysis.&quot;&quot;&quot;</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a>
-</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a>    <span class="n">upper_bound</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Highest possible BPM value that will be considered in tempo analysis.&quot;&quot;&quot;</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>
-</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">novelty_function</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">similarity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">number_of_dominant_values</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>                 <span class="n">lower_bound</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">40</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">):</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="sd">        :param novelty_function: Novelty function of the input audio signal.</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a><span class="sd">        :param similarity: BPM tolerance that specifies which BPM values belong to the same group.</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a><span class="sd">        :param number_of_dominant_values: How many dominant BPM values should be extracted for later computations.</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a><span class="sd">        :param lower_bound: Lowest possible BPM value that will be considered.</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a><span class="sd">        :param upper_bound: Highest possible BPM value that will be considered.</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">novelty_function</span> <span class="o">=</span> <span class="n">novelty_function</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">similarity</span> <span class="o">=</span> <span class="n">similarity</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_dominant_values</span> <span class="o">=</span> <span class="n">number_of_dominant_values</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">tempogram</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">bpm_values</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">tempo</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">=</span> <span class="n">lower_bound</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span> <span class="o">=</span> <span class="n">upper_bound</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>
-</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>    <span class="k">def</span> <span class="nf">_group_similar_bpms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bpm_list</span><span class="p">:</span> <span class="p">[])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Group similar BPM values together, because there is a high chance that they represent the same</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="sd">        dominant BPM value.</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>
-</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="sd">        :param bpm_list: list of extracted dominant bpm values</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a><span class="sd">        :return: list of groups (each group is also a list and contains similar BPMs)&quot;&quot;&quot;</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>        <span class="n">groups</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>        <span class="k">for</span> <span class="n">bpm</span> <span class="ow">in</span> <span class="n">bpm_list</span><span class="p">:</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>            <span class="n">appended</span> <span class="o">=</span> <span class="kc">False</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">groups</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>                <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpm</span> <span class="o">-</span> <span class="n">key</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">similarity</span><span class="p">:</span>  <span class="c1"># if a similar group already exists, add this bpm to it</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>                    <span class="n">groups</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bpm</span><span class="p">)</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>                    <span class="n">appended</span> <span class="o">=</span> <span class="kc">True</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>            <span class="k">if</span> <span class="ow">not</span> <span class="n">appended</span><span class="p">:</span>  <span class="c1"># otherwise create a new group for it</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>                <span class="n">groups</span><span class="p">[</span><span class="n">bpm</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">bpm</span><span class="p">]</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>        <span class="k">return</span> <span class="n">groups</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>
-</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>    <span class="k">def</span> <span class="nf">_get_dominant_group_avg</span><span class="p">(</span><span class="n">groups</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the average value of the dominant BPM group.</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>
-</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="sd">        :param groups: BPM groups</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="sd">        :param weights: weght that each bpm has (based on how dominant its values was in the tempogram)</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="sd">        :return: the computed most dominant BPM</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>        <span class="n">dominant_bpm</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>        <span class="n">dominant_weight</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>        <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">groups</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>            <span class="n">bpm_sum</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># total sum of numbers of the group</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>            <span class="n">weight</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># total weight of group</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>            <span class="k">for</span> <span class="n">bpm</span> <span class="ow">in</span> <span class="n">group</span><span class="p">:</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>                <span class="n">bpm_sum</span> <span class="o">+=</span> <span class="n">bpm</span> <span class="o">*</span> <span class="n">weights</span><span class="p">[</span><span class="n">bpm</span><span class="p">]</span>
-</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>                <span class="n">weight</span> <span class="o">+=</span> <span class="n">weights</span><span class="p">[</span><span class="n">bpm</span><span class="p">]</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>            <span class="n">average</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">bpm_sum</span> <span class="o">/</span> <span class="n">weight</span><span class="p">)</span>
-</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>            <span class="k">if</span> <span class="n">dominant_weight</span> <span class="o">&lt;</span> <span class="n">weight</span><span class="p">:</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>                <span class="n">dominant_weight</span> <span class="o">=</span> <span class="n">weight</span>
-</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>                <span class="n">dominant_bpm</span> <span class="o">=</span> <span class="n">average</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>        <span class="k">return</span> <span class="n">dominant_bpm</span>
-</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>
-</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>    <span class="k">def</span> <span class="nf">_find_dominant_BPM</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bpm_list</span><span class="p">:</span> <span class="p">[])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Find the most probable tempo of the song from the list of dominant BPM values.</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="sd">        :param bpm_list: dominant BPM values</span>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="sd">        :return: computed song BPM</span>
-</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>        <span class="n">weights</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bpm_list</span><span class="p">)):</span>
-</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>            <span class="n">weights</span><span class="p">[</span><span class="n">bpm_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bpm_list</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span>  <span class="c1"># the closer to the start of the bpm_list, the higher the weight</span>
-</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>
-</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>        <span class="c1"># group similar BPMs together:</span>
-</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>        <span class="n">similar_bpm_groups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group_similar_bpms</span><span class="p">(</span><span class="n">bpm_list</span><span class="p">)</span>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>
-</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>        <span class="c1"># find the group with the highest weight and take it&#39;s rounded average as the final dominant bpm</span>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>        <span class="n">dominant_bpm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_dominant_group_avg</span><span class="p">(</span><span class="n">similar_bpm_groups</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
-</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>
-</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>        <span class="k">return</span> <span class="n">dominant_bpm</span>
-</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>
-</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>    <span class="k">def</span> <span class="nf">_get_possible_BPM_from_tempogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze the fourier tempogram and extract bpm values that are dominant.</span>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a><span class="sd">        :return: List of dominant BPM values (its size will be at least self.number_of_dominant_values)</span>
-</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>        <span class="c1"># get list of BPMs that the fourier tempogram represents</span>
-</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>        <span class="n">max_bpms</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># this list will hold BPMs with very high values - possible BPMs of the song</span>
-</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>        <span class="n">sum_of_tempos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tempogram</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># sum of values for all tempos in tempogram</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a>
+</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="k">class</span> <span class="nc">Tempogram</span><span class="p">:</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for specific tempogram implementations.</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="sd">    \n</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="sd">    A **tempogram** indicates specific tempo relevance for each time instance in a song.</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="sd">    Only an interval of reasonable tempi should be considered for tempo analysis, as too high values</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="sd">    or too small values do not really make sense in terms of musical tempo analysis.</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="sd">    \n</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="sd">    We assume that the input songs have constant tempo and the BPM value is an integer.&quot;&quot;&quot;</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a>
+</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a>    <span class="n">novelty_function</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Novelty function of the input audio signal.&quot;&quot;&quot;</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a>
+</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a>    <span class="n">similarity</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;BPM tolerance that specifies which BPM values belong to the same group.&quot;&quot;&quot;</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a>
+</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a>    <span class="n">number_of_dominant_values</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;How many dominant BPM values should be extracted for later computations.&quot;&quot;&quot;</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a>
+</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>    <span class="n">tempogram</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Tempogram of the input audio file. &quot;&quot;&quot;</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>
+</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>    <span class="n">bpm_values</span><span class="p">:</span> <span class="p">[]</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;List of dominant BPM values.&quot;&quot;&quot;</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>
+</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a>    <span class="n">tempo</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;The most dominant BPM value that should indicate tempo of the song.&quot;&quot;&quot;</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a>
+</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>    <span class="n">lower_bound</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Lowest possible BPM value that will be considered in tempo analysis.&quot;&quot;&quot;</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a>
+</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a>    <span class="n">upper_bound</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Highest possible BPM value that will be considered in tempo analysis.&quot;&quot;&quot;</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>
+</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>    <span class="n">sampling_rate</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Defines the number of samples per second taken from a continuous signal to make a discrete signal.&quot;&quot;&quot;</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>
+</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a>    <span class="n">frame_length</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of samples in a frame.&quot;&quot;&quot;</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a>
+</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a>    <span class="n">hop_length</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of samples by which we have to advance between two consecutive frames.&quot;&quot;&quot;</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>
+</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">novelty_function</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>                 <span class="n">similarity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>                 <span class="n">number_of_dominant_values</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>                 <span class="n">lower_bound</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">40</span><span class="p">,</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a>                 <span class="n">upper_bound</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>                 <span class="n">sampling_rate</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">SAMPLING_RATE</span><span class="p">,</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>                 <span class="n">hop_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">HOP_LENGTH</span><span class="p">,</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>                 <span class="n">frame_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">FRAME_LENGTH</span><span class="p">):</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="sd">        :param novelty_function: Novelty function of the input audio signal.</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="sd">        :param similarity: BPM tolerance that specifies which BPM values belong to the same group.</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="sd">        :param number_of_dominant_values: How many dominant BPM values should be extracted for later computations.</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="sd">        :param lower_bound: Lowest possible BPM value that will be considered.</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a><span class="sd">        :param upper_bound: Highest possible BPM value that will be considered.</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="sd">        :param sampling_rate: Defines the number of samples per second taken from a continuous signal</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="sd">         to make a discrete signal.</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="sd">        :param frame_length: Number of samples in a frame.</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="sd">        :param hop_length: Number of samples by which we have to advance between two consecutive frames.</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">novelty_function</span> <span class="o">=</span> <span class="n">novelty_function</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">similarity</span> <span class="o">=</span> <span class="n">similarity</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_dominant_values</span> <span class="o">=</span> <span class="n">number_of_dominant_values</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">tempogram</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">bpm_values</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">tempo</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">=</span> <span class="n">lower_bound</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span> <span class="o">=</span> <span class="n">upper_bound</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">sampling_rate</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">frame_length</span> <span class="o">=</span> <span class="n">frame_length</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">hop_length</span> <span class="o">=</span> <span class="n">hop_length</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>    <span class="k">def</span> <span class="nf">_group_similar_bpms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bpm_list</span><span class="p">:</span> <span class="p">[])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Group similar BPM values together, because there is a high chance that they represent the same</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a><span class="sd">        dominant BPM value.</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>
+</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a><span class="sd">        :param bpm_list: list of extracted dominant bpm values</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a><span class="sd">        :return: list of groups (each group is also a list and contains similar BPMs)&quot;&quot;&quot;</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>        <span class="n">groups</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>        <span class="k">for</span> <span class="n">bpm</span> <span class="ow">in</span> <span class="n">bpm_list</span><span class="p">:</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>            <span class="n">appended</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">groups</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>                <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpm</span> <span class="o">-</span> <span class="n">key</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">similarity</span><span class="p">:</span>  <span class="c1"># if a similar group already exists, add this bpm to it</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>                    <span class="n">groups</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bpm</span><span class="p">)</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>                    <span class="n">appended</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>            <span class="k">if</span> <span class="ow">not</span> <span class="n">appended</span><span class="p">:</span>  <span class="c1"># otherwise create a new group for it</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>                <span class="n">groups</span><span class="p">[</span><span class="n">bpm</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">bpm</span><span class="p">]</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>        <span class="k">return</span> <span class="n">groups</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>    <span class="k">def</span> <span class="nf">_get_dominant_group_avg</span><span class="p">(</span><span class="n">groups</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the average value of the dominant BPM group.</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="sd">        :param groups: BPM groups</span>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="sd">        :param weights: weght that each bpm has (based on how dominant its values was in the tempogram)</span>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="sd">        :return: the computed most dominant BPM</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>        <span class="n">dominant_bpm</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>        <span class="n">dominant_weight</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>        <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">groups</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>            <span class="n">bpm_sum</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># total sum of numbers of the group</span>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>            <span class="n">weight</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># total weight of group</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>            <span class="k">for</span> <span class="n">bpm</span> <span class="ow">in</span> <span class="n">group</span><span class="p">:</span>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>                <span class="n">bpm_sum</span> <span class="o">+=</span> <span class="n">bpm</span> <span class="o">*</span> <span class="n">weights</span><span class="p">[</span><span class="n">bpm</span><span class="p">]</span>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>                <span class="n">weight</span> <span class="o">+=</span> <span class="n">weights</span><span class="p">[</span><span class="n">bpm</span><span class="p">]</span>
+</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>            <span class="n">average</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">bpm_sum</span> <span class="o">/</span> <span class="n">weight</span><span class="p">)</span>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>            <span class="k">if</span> <span class="n">dominant_weight</span> <span class="o">&lt;</span> <span class="n">weight</span><span class="p">:</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>                <span class="n">dominant_weight</span> <span class="o">=</span> <span class="n">weight</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>                <span class="n">dominant_bpm</span> <span class="o">=</span> <span class="n">average</span>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>        <span class="k">return</span> <span class="n">dominant_bpm</span>
+</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>
+</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>    <span class="k">def</span> <span class="nf">_find_dominant_BPM</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bpm_list</span><span class="p">:</span> <span class="p">[])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Find the most probable tempo of the song from the list of dominant BPM values.</span>
 </span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>
-</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">max_bpms</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_dominant_values</span><span class="p">:</span>
-</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>            <span class="n">max_bpm_indices</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_dominant_values</span><span class="p">):</span>
-</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>                <span class="n">max_bpm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">sum_of_tempos</span><span class="p">)</span>
-</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>                <span class="n">max_bpm_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">max_bpm</span><span class="p">)</span>
-</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>                <span class="n">sum_of_tempos</span><span class="p">[</span><span class="n">max_bpm</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>            <span class="n">max_bpms</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bpm_values</span><span class="p">[</span><span class="n">max_bpm_indices</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">])</span>
-</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>
-</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>        <span class="k">return</span> <span class="n">max_bpms</span>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a><span class="sd">        :param bpm_list: dominant BPM values</span>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="sd">        :return: computed song BPM</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>        <span class="n">weights</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bpm_list</span><span class="p">)):</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>            <span class="n">weights</span><span class="p">[</span><span class="n">bpm_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bpm_list</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span>  <span class="c1"># the closer to the start of the bpm_list, the higher the weight</span>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>        <span class="c1"># group similar BPMs together:</span>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>        <span class="n">similar_bpm_groups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group_similar_bpms</span><span class="p">(</span><span class="n">bpm_list</span><span class="p">)</span>
 </span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>
-</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>    <span class="k">def</span> <span class="nf">_compute_tempogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute tempogram for given novelty function.&quot;&quot;&quot;</span>
-</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>        <span class="k">pass</span>
-</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>
-</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>    <span class="k">def</span> <span class="nf">_analyze_tempo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze the computed tempogram to find dominant tempo.&quot;&quot;&quot;</span>
-</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tempogram</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_compute_tempogram</span><span class="p">()</span>
-</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>
-</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>    <span class="k">def</span> <span class="nf">get_tempogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the computed tempogram.&quot;&quot;&quot;</span>
-</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_compute_tempogram</span><span class="p">()</span>
-</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tempogram</span>
-</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>
-</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>    <span class="k">def</span> <span class="nf">get_tempo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the most dominant tempo.&quot;&quot;&quot;</span>
-</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_compute_tempogram</span><span class="p">()</span>
-</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_tempo</span><span class="p">()</span>
-</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>
-</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tempo</span>
+</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>        <span class="c1"># find the group with the highest weight and take it&#39;s rounded average as the final dominant bpm</span>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>        <span class="n">dominant_bpm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_dominant_group_avg</span><span class="p">(</span><span class="n">similar_bpm_groups</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>
+</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>        <span class="k">return</span> <span class="n">dominant_bpm</span>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>    <span class="k">def</span> <span class="nf">_get_possible_BPM_from_tempogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze the fourier tempogram and extract bpm values that are dominant.</span>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a><span class="sd">        :return: List of dominant BPM values (its size will be at least self.number_of_dominant_values)</span>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>        <span class="c1"># get list of BPMs that the fourier tempogram represents</span>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a>        <span class="n">max_bpms</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># this list will hold BPMs with very high values - possible BPMs of the song</span>
+</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>        <span class="n">sum_of_tempos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tempogram</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># sum of values for all tempos in tempogram</span>
+</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>
+</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">max_bpms</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_dominant_values</span><span class="p">:</span>
+</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>            <span class="n">max_bpm_indices</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_dominant_values</span><span class="p">):</span>
+</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>                <span class="n">max_bpm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">sum_of_tempos</span><span class="p">)</span>
+</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>                <span class="n">max_bpm_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">max_bpm</span><span class="p">)</span>
+</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>                <span class="n">sum_of_tempos</span><span class="p">[</span><span class="n">max_bpm</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>            <span class="n">max_bpms</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bpm_values</span><span class="p">[</span><span class="n">max_bpm_indices</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">])</span>
+</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>
+</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>        <span class="k">return</span> <span class="n">max_bpms</span>
+</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>    <span class="k">def</span> <span class="nf">_compute_tempogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute tempogram for given novelty function.&quot;&quot;&quot;</span>
+</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>        <span class="k">pass</span>
+</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>
+</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>    <span class="k">def</span> <span class="nf">_analyze_tempo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze the computed tempogram to find dominant tempo.&quot;&quot;&quot;</span>
+</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tempogram</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_compute_tempogram</span><span class="p">()</span>
+</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>
+</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>    <span class="k">def</span> <span class="nf">get_tempogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the computed tempogram.&quot;&quot;&quot;</span>
+</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_compute_tempogram</span><span class="p">()</span>
+</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tempogram</span>
+</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>
+</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>    <span class="k">def</span> <span class="nf">get_tempo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the most dominant tempo.&quot;&quot;&quot;</span>
+</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_compute_tempogram</span><span class="p">()</span>
+</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_tempo</span><span class="p">()</span>
+</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a>
+</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tempo</span>
 </span></pre></div>
 
 
@@ -254,152 +286,174 @@
 
     </div>
     <a class="headerlink" href="#Tempogram"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Tempogram-5"><a href="#Tempogram-5"><span class="linenos">  5</span></a><span class="k">class</span> <span class="nc">Tempogram</span><span class="p">:</span>
-</span><span id="Tempogram-6"><a href="#Tempogram-6"><span class="linenos">  6</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for specific tempogram implementations.</span>
-</span><span id="Tempogram-7"><a href="#Tempogram-7"><span class="linenos">  7</span></a><span class="sd">    \n</span>
-</span><span id="Tempogram-8"><a href="#Tempogram-8"><span class="linenos">  8</span></a><span class="sd">    A **tempogram** indicates specific tempo relevance for each time instance in a song.</span>
-</span><span id="Tempogram-9"><a href="#Tempogram-9"><span class="linenos">  9</span></a><span class="sd">    Only an interval of reasonable tempi should be considered for tempo analysis, as too high values</span>
-</span><span id="Tempogram-10"><a href="#Tempogram-10"><span class="linenos"> 10</span></a><span class="sd">    or too small values do not really make sense in terms of musical tempo analysis.</span>
-</span><span id="Tempogram-11"><a href="#Tempogram-11"><span class="linenos"> 11</span></a><span class="sd">    \n</span>
-</span><span id="Tempogram-12"><a href="#Tempogram-12"><span class="linenos"> 12</span></a><span class="sd">    We assume that the input songs have constant tempo and the BPM value is an integer.&quot;&quot;&quot;</span>
-</span><span id="Tempogram-13"><a href="#Tempogram-13"><span class="linenos"> 13</span></a>
-</span><span id="Tempogram-14"><a href="#Tempogram-14"><span class="linenos"> 14</span></a>    <span class="n">novelty_function</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
-</span><span id="Tempogram-15"><a href="#Tempogram-15"><span class="linenos"> 15</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Novelty function of the input audio signal.&quot;&quot;&quot;</span>
-</span><span id="Tempogram-16"><a href="#Tempogram-16"><span class="linenos"> 16</span></a>
-</span><span id="Tempogram-17"><a href="#Tempogram-17"><span class="linenos"> 17</span></a>    <span class="n">similarity</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="Tempogram-18"><a href="#Tempogram-18"><span class="linenos"> 18</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;BPM tolerance that specifies which BPM values belong to the same group.&quot;&quot;&quot;</span>
-</span><span id="Tempogram-19"><a href="#Tempogram-19"><span class="linenos"> 19</span></a>
-</span><span id="Tempogram-20"><a href="#Tempogram-20"><span class="linenos"> 20</span></a>    <span class="n">number_of_dominant_values</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="Tempogram-21"><a href="#Tempogram-21"><span class="linenos"> 21</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;How many dominant BPM values should be extracted for later computations.&quot;&quot;&quot;</span>
-</span><span id="Tempogram-22"><a href="#Tempogram-22"><span class="linenos"> 22</span></a>
-</span><span id="Tempogram-23"><a href="#Tempogram-23"><span class="linenos"> 23</span></a>    <span class="n">tempogram</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span>
-</span><span id="Tempogram-24"><a href="#Tempogram-24"><span class="linenos"> 24</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Tempogram of the input audio file. &quot;&quot;&quot;</span>
-</span><span id="Tempogram-25"><a href="#Tempogram-25"><span class="linenos"> 25</span></a>
-</span><span id="Tempogram-26"><a href="#Tempogram-26"><span class="linenos"> 26</span></a>    <span class="n">bpm_values</span><span class="p">:</span> <span class="p">[]</span>
-</span><span id="Tempogram-27"><a href="#Tempogram-27"><span class="linenos"> 27</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;List of dominant BPM values.&quot;&quot;&quot;</span>
-</span><span id="Tempogram-28"><a href="#Tempogram-28"><span class="linenos"> 28</span></a>
-</span><span id="Tempogram-29"><a href="#Tempogram-29"><span class="linenos"> 29</span></a>    <span class="n">tempo</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span>
-</span><span id="Tempogram-30"><a href="#Tempogram-30"><span class="linenos"> 30</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;The most dominant BPM value that should indicate tempo of the song.&quot;&quot;&quot;</span>
-</span><span id="Tempogram-31"><a href="#Tempogram-31"><span class="linenos"> 31</span></a>
-</span><span id="Tempogram-32"><a href="#Tempogram-32"><span class="linenos"> 32</span></a>    <span class="n">lower_bound</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="Tempogram-33"><a href="#Tempogram-33"><span class="linenos"> 33</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Lowest possible BPM value that will be considered in tempo analysis.&quot;&quot;&quot;</span>
-</span><span id="Tempogram-34"><a href="#Tempogram-34"><span class="linenos"> 34</span></a>
-</span><span id="Tempogram-35"><a href="#Tempogram-35"><span class="linenos"> 35</span></a>    <span class="n">upper_bound</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="Tempogram-36"><a href="#Tempogram-36"><span class="linenos"> 36</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Highest possible BPM value that will be considered in tempo analysis.&quot;&quot;&quot;</span>
-</span><span id="Tempogram-37"><a href="#Tempogram-37"><span class="linenos"> 37</span></a>
-</span><span id="Tempogram-38"><a href="#Tempogram-38"><span class="linenos"> 38</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">novelty_function</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">similarity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">number_of_dominant_values</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
-</span><span id="Tempogram-39"><a href="#Tempogram-39"><span class="linenos"> 39</span></a>                 <span class="n">lower_bound</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">40</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">):</span>
-</span><span id="Tempogram-40"><a href="#Tempogram-40"><span class="linenos"> 40</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Tempogram-41"><a href="#Tempogram-41"><span class="linenos"> 41</span></a><span class="sd">        :param novelty_function: Novelty function of the input audio signal.</span>
-</span><span id="Tempogram-42"><a href="#Tempogram-42"><span class="linenos"> 42</span></a><span class="sd">        :param similarity: BPM tolerance that specifies which BPM values belong to the same group.</span>
-</span><span id="Tempogram-43"><a href="#Tempogram-43"><span class="linenos"> 43</span></a><span class="sd">        :param number_of_dominant_values: How many dominant BPM values should be extracted for later computations.</span>
-</span><span id="Tempogram-44"><a href="#Tempogram-44"><span class="linenos"> 44</span></a><span class="sd">        :param lower_bound: Lowest possible BPM value that will be considered.</span>
-</span><span id="Tempogram-45"><a href="#Tempogram-45"><span class="linenos"> 45</span></a><span class="sd">        :param upper_bound: Highest possible BPM value that will be considered.</span>
-</span><span id="Tempogram-46"><a href="#Tempogram-46"><span class="linenos"> 46</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Tempogram-47"><a href="#Tempogram-47"><span class="linenos"> 47</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">novelty_function</span> <span class="o">=</span> <span class="n">novelty_function</span>
-</span><span id="Tempogram-48"><a href="#Tempogram-48"><span class="linenos"> 48</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">similarity</span> <span class="o">=</span> <span class="n">similarity</span>
-</span><span id="Tempogram-49"><a href="#Tempogram-49"><span class="linenos"> 49</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_dominant_values</span> <span class="o">=</span> <span class="n">number_of_dominant_values</span>
-</span><span id="Tempogram-50"><a href="#Tempogram-50"><span class="linenos"> 50</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">tempogram</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Tempogram-51"><a href="#Tempogram-51"><span class="linenos"> 51</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">bpm_values</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="Tempogram-52"><a href="#Tempogram-52"><span class="linenos"> 52</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">tempo</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Tempogram-53"><a href="#Tempogram-53"><span class="linenos"> 53</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">=</span> <span class="n">lower_bound</span>
-</span><span id="Tempogram-54"><a href="#Tempogram-54"><span class="linenos"> 54</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span> <span class="o">=</span> <span class="n">upper_bound</span>
-</span><span id="Tempogram-55"><a href="#Tempogram-55"><span class="linenos"> 55</span></a>
-</span><span id="Tempogram-56"><a href="#Tempogram-56"><span class="linenos"> 56</span></a>    <span class="k">def</span> <span class="nf">_group_similar_bpms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bpm_list</span><span class="p">:</span> <span class="p">[])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-</span><span id="Tempogram-57"><a href="#Tempogram-57"><span class="linenos"> 57</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Group similar BPM values together, because there is a high chance that they represent the same</span>
-</span><span id="Tempogram-58"><a href="#Tempogram-58"><span class="linenos"> 58</span></a><span class="sd">        dominant BPM value.</span>
-</span><span id="Tempogram-59"><a href="#Tempogram-59"><span class="linenos"> 59</span></a>
-</span><span id="Tempogram-60"><a href="#Tempogram-60"><span class="linenos"> 60</span></a><span class="sd">        :param bpm_list: list of extracted dominant bpm values</span>
-</span><span id="Tempogram-61"><a href="#Tempogram-61"><span class="linenos"> 61</span></a><span class="sd">        :return: list of groups (each group is also a list and contains similar BPMs)&quot;&quot;&quot;</span>
-</span><span id="Tempogram-62"><a href="#Tempogram-62"><span class="linenos"> 62</span></a>        <span class="n">groups</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span id="Tempogram-63"><a href="#Tempogram-63"><span class="linenos"> 63</span></a>        <span class="k">for</span> <span class="n">bpm</span> <span class="ow">in</span> <span class="n">bpm_list</span><span class="p">:</span>
-</span><span id="Tempogram-64"><a href="#Tempogram-64"><span class="linenos"> 64</span></a>            <span class="n">appended</span> <span class="o">=</span> <span class="kc">False</span>
-</span><span id="Tempogram-65"><a href="#Tempogram-65"><span class="linenos"> 65</span></a>            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">groups</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-</span><span id="Tempogram-66"><a href="#Tempogram-66"><span class="linenos"> 66</span></a>                <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpm</span> <span class="o">-</span> <span class="n">key</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">similarity</span><span class="p">:</span>  <span class="c1"># if a similar group already exists, add this bpm to it</span>
-</span><span id="Tempogram-67"><a href="#Tempogram-67"><span class="linenos"> 67</span></a>                    <span class="n">groups</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bpm</span><span class="p">)</span>
-</span><span id="Tempogram-68"><a href="#Tempogram-68"><span class="linenos"> 68</span></a>                    <span class="n">appended</span> <span class="o">=</span> <span class="kc">True</span>
-</span><span id="Tempogram-69"><a href="#Tempogram-69"><span class="linenos"> 69</span></a>            <span class="k">if</span> <span class="ow">not</span> <span class="n">appended</span><span class="p">:</span>  <span class="c1"># otherwise create a new group for it</span>
-</span><span id="Tempogram-70"><a href="#Tempogram-70"><span class="linenos"> 70</span></a>                <span class="n">groups</span><span class="p">[</span><span class="n">bpm</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">bpm</span><span class="p">]</span>
-</span><span id="Tempogram-71"><a href="#Tempogram-71"><span class="linenos"> 71</span></a>        <span class="k">return</span> <span class="n">groups</span>
-</span><span id="Tempogram-72"><a href="#Tempogram-72"><span class="linenos"> 72</span></a>
-</span><span id="Tempogram-73"><a href="#Tempogram-73"><span class="linenos"> 73</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="Tempogram-74"><a href="#Tempogram-74"><span class="linenos"> 74</span></a>    <span class="k">def</span> <span class="nf">_get_dominant_group_avg</span><span class="p">(</span><span class="n">groups</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Tempogram-75"><a href="#Tempogram-75"><span class="linenos"> 75</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the average value of the dominant BPM group.</span>
-</span><span id="Tempogram-76"><a href="#Tempogram-76"><span class="linenos"> 76</span></a>
-</span><span id="Tempogram-77"><a href="#Tempogram-77"><span class="linenos"> 77</span></a><span class="sd">        :param groups: BPM groups</span>
-</span><span id="Tempogram-78"><a href="#Tempogram-78"><span class="linenos"> 78</span></a><span class="sd">        :param weights: weght that each bpm has (based on how dominant its values was in the tempogram)</span>
-</span><span id="Tempogram-79"><a href="#Tempogram-79"><span class="linenos"> 79</span></a><span class="sd">        :return: the computed most dominant BPM</span>
-</span><span id="Tempogram-80"><a href="#Tempogram-80"><span class="linenos"> 80</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Tempogram-81"><a href="#Tempogram-81"><span class="linenos"> 81</span></a>        <span class="n">dominant_bpm</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Tempogram-82"><a href="#Tempogram-82"><span class="linenos"> 82</span></a>        <span class="n">dominant_weight</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span id="Tempogram-83"><a href="#Tempogram-83"><span class="linenos"> 83</span></a>        <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">groups</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-</span><span id="Tempogram-84"><a href="#Tempogram-84"><span class="linenos"> 84</span></a>            <span class="n">bpm_sum</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># total sum of numbers of the group</span>
-</span><span id="Tempogram-85"><a href="#Tempogram-85"><span class="linenos"> 85</span></a>            <span class="n">weight</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># total weight of group</span>
-</span><span id="Tempogram-86"><a href="#Tempogram-86"><span class="linenos"> 86</span></a>            <span class="k">for</span> <span class="n">bpm</span> <span class="ow">in</span> <span class="n">group</span><span class="p">:</span>
-</span><span id="Tempogram-87"><a href="#Tempogram-87"><span class="linenos"> 87</span></a>                <span class="n">bpm_sum</span> <span class="o">+=</span> <span class="n">bpm</span> <span class="o">*</span> <span class="n">weights</span><span class="p">[</span><span class="n">bpm</span><span class="p">]</span>
-</span><span id="Tempogram-88"><a href="#Tempogram-88"><span class="linenos"> 88</span></a>                <span class="n">weight</span> <span class="o">+=</span> <span class="n">weights</span><span class="p">[</span><span class="n">bpm</span><span class="p">]</span>
-</span><span id="Tempogram-89"><a href="#Tempogram-89"><span class="linenos"> 89</span></a>            <span class="n">average</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">bpm_sum</span> <span class="o">/</span> <span class="n">weight</span><span class="p">)</span>
-</span><span id="Tempogram-90"><a href="#Tempogram-90"><span class="linenos"> 90</span></a>            <span class="k">if</span> <span class="n">dominant_weight</span> <span class="o">&lt;</span> <span class="n">weight</span><span class="p">:</span>
-</span><span id="Tempogram-91"><a href="#Tempogram-91"><span class="linenos"> 91</span></a>                <span class="n">dominant_weight</span> <span class="o">=</span> <span class="n">weight</span>
-</span><span id="Tempogram-92"><a href="#Tempogram-92"><span class="linenos"> 92</span></a>                <span class="n">dominant_bpm</span> <span class="o">=</span> <span class="n">average</span>
-</span><span id="Tempogram-93"><a href="#Tempogram-93"><span class="linenos"> 93</span></a>        <span class="k">return</span> <span class="n">dominant_bpm</span>
-</span><span id="Tempogram-94"><a href="#Tempogram-94"><span class="linenos"> 94</span></a>
-</span><span id="Tempogram-95"><a href="#Tempogram-95"><span class="linenos"> 95</span></a>    <span class="k">def</span> <span class="nf">_find_dominant_BPM</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bpm_list</span><span class="p">:</span> <span class="p">[])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Tempogram-96"><a href="#Tempogram-96"><span class="linenos"> 96</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Find the most probable tempo of the song from the list of dominant BPM values.</span>
-</span><span id="Tempogram-97"><a href="#Tempogram-97"><span class="linenos"> 97</span></a>
-</span><span id="Tempogram-98"><a href="#Tempogram-98"><span class="linenos"> 98</span></a><span class="sd">        :param bpm_list: dominant BPM values</span>
-</span><span id="Tempogram-99"><a href="#Tempogram-99"><span class="linenos"> 99</span></a><span class="sd">        :return: computed song BPM</span>
-</span><span id="Tempogram-100"><a href="#Tempogram-100"><span class="linenos">100</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Tempogram-101"><a href="#Tempogram-101"><span class="linenos">101</span></a>        <span class="n">weights</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span id="Tempogram-102"><a href="#Tempogram-102"><span class="linenos">102</span></a>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bpm_list</span><span class="p">)):</span>
-</span><span id="Tempogram-103"><a href="#Tempogram-103"><span class="linenos">103</span></a>            <span class="n">weights</span><span class="p">[</span><span class="n">bpm_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bpm_list</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span>  <span class="c1"># the closer to the start of the bpm_list, the higher the weight</span>
-</span><span id="Tempogram-104"><a href="#Tempogram-104"><span class="linenos">104</span></a>
-</span><span id="Tempogram-105"><a href="#Tempogram-105"><span class="linenos">105</span></a>        <span class="c1"># group similar BPMs together:</span>
-</span><span id="Tempogram-106"><a href="#Tempogram-106"><span class="linenos">106</span></a>        <span class="n">similar_bpm_groups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group_similar_bpms</span><span class="p">(</span><span class="n">bpm_list</span><span class="p">)</span>
-</span><span id="Tempogram-107"><a href="#Tempogram-107"><span class="linenos">107</span></a>
-</span><span id="Tempogram-108"><a href="#Tempogram-108"><span class="linenos">108</span></a>        <span class="c1"># find the group with the highest weight and take it&#39;s rounded average as the final dominant bpm</span>
-</span><span id="Tempogram-109"><a href="#Tempogram-109"><span class="linenos">109</span></a>        <span class="n">dominant_bpm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_dominant_group_avg</span><span class="p">(</span><span class="n">similar_bpm_groups</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
-</span><span id="Tempogram-110"><a href="#Tempogram-110"><span class="linenos">110</span></a>
-</span><span id="Tempogram-111"><a href="#Tempogram-111"><span class="linenos">111</span></a>        <span class="k">return</span> <span class="n">dominant_bpm</span>
-</span><span id="Tempogram-112"><a href="#Tempogram-112"><span class="linenos">112</span></a>
-</span><span id="Tempogram-113"><a href="#Tempogram-113"><span class="linenos">113</span></a>    <span class="k">def</span> <span class="nf">_get_possible_BPM_from_tempogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-</span><span id="Tempogram-114"><a href="#Tempogram-114"><span class="linenos">114</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze the fourier tempogram and extract bpm values that are dominant.</span>
-</span><span id="Tempogram-115"><a href="#Tempogram-115"><span class="linenos">115</span></a><span class="sd">        :return: List of dominant BPM values (its size will be at least self.number_of_dominant_values)</span>
-</span><span id="Tempogram-116"><a href="#Tempogram-116"><span class="linenos">116</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Tempogram-117"><a href="#Tempogram-117"><span class="linenos">117</span></a>        <span class="c1"># get list of BPMs that the fourier tempogram represents</span>
-</span><span id="Tempogram-118"><a href="#Tempogram-118"><span class="linenos">118</span></a>        <span class="n">max_bpms</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># this list will hold BPMs with very high values - possible BPMs of the song</span>
-</span><span id="Tempogram-119"><a href="#Tempogram-119"><span class="linenos">119</span></a>        <span class="n">sum_of_tempos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tempogram</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># sum of values for all tempos in tempogram</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Tempogram-6"><a href="#Tempogram-6"><span class="linenos">  6</span></a><span class="k">class</span> <span class="nc">Tempogram</span><span class="p">:</span>
+</span><span id="Tempogram-7"><a href="#Tempogram-7"><span class="linenos">  7</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for specific tempogram implementations.</span>
+</span><span id="Tempogram-8"><a href="#Tempogram-8"><span class="linenos">  8</span></a><span class="sd">    \n</span>
+</span><span id="Tempogram-9"><a href="#Tempogram-9"><span class="linenos">  9</span></a><span class="sd">    A **tempogram** indicates specific tempo relevance for each time instance in a song.</span>
+</span><span id="Tempogram-10"><a href="#Tempogram-10"><span class="linenos"> 10</span></a><span class="sd">    Only an interval of reasonable tempi should be considered for tempo analysis, as too high values</span>
+</span><span id="Tempogram-11"><a href="#Tempogram-11"><span class="linenos"> 11</span></a><span class="sd">    or too small values do not really make sense in terms of musical tempo analysis.</span>
+</span><span id="Tempogram-12"><a href="#Tempogram-12"><span class="linenos"> 12</span></a><span class="sd">    \n</span>
+</span><span id="Tempogram-13"><a href="#Tempogram-13"><span class="linenos"> 13</span></a><span class="sd">    We assume that the input songs have constant tempo and the BPM value is an integer.&quot;&quot;&quot;</span>
+</span><span id="Tempogram-14"><a href="#Tempogram-14"><span class="linenos"> 14</span></a>
+</span><span id="Tempogram-15"><a href="#Tempogram-15"><span class="linenos"> 15</span></a>    <span class="n">novelty_function</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+</span><span id="Tempogram-16"><a href="#Tempogram-16"><span class="linenos"> 16</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Novelty function of the input audio signal.&quot;&quot;&quot;</span>
+</span><span id="Tempogram-17"><a href="#Tempogram-17"><span class="linenos"> 17</span></a>
+</span><span id="Tempogram-18"><a href="#Tempogram-18"><span class="linenos"> 18</span></a>    <span class="n">similarity</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="Tempogram-19"><a href="#Tempogram-19"><span class="linenos"> 19</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;BPM tolerance that specifies which BPM values belong to the same group.&quot;&quot;&quot;</span>
+</span><span id="Tempogram-20"><a href="#Tempogram-20"><span class="linenos"> 20</span></a>
+</span><span id="Tempogram-21"><a href="#Tempogram-21"><span class="linenos"> 21</span></a>    <span class="n">number_of_dominant_values</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="Tempogram-22"><a href="#Tempogram-22"><span class="linenos"> 22</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;How many dominant BPM values should be extracted for later computations.&quot;&quot;&quot;</span>
+</span><span id="Tempogram-23"><a href="#Tempogram-23"><span class="linenos"> 23</span></a>
+</span><span id="Tempogram-24"><a href="#Tempogram-24"><span class="linenos"> 24</span></a>    <span class="n">tempogram</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span>
+</span><span id="Tempogram-25"><a href="#Tempogram-25"><span class="linenos"> 25</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Tempogram of the input audio file. &quot;&quot;&quot;</span>
+</span><span id="Tempogram-26"><a href="#Tempogram-26"><span class="linenos"> 26</span></a>
+</span><span id="Tempogram-27"><a href="#Tempogram-27"><span class="linenos"> 27</span></a>    <span class="n">bpm_values</span><span class="p">:</span> <span class="p">[]</span>
+</span><span id="Tempogram-28"><a href="#Tempogram-28"><span class="linenos"> 28</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;List of dominant BPM values.&quot;&quot;&quot;</span>
+</span><span id="Tempogram-29"><a href="#Tempogram-29"><span class="linenos"> 29</span></a>
+</span><span id="Tempogram-30"><a href="#Tempogram-30"><span class="linenos"> 30</span></a>    <span class="n">tempo</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span>
+</span><span id="Tempogram-31"><a href="#Tempogram-31"><span class="linenos"> 31</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;The most dominant BPM value that should indicate tempo of the song.&quot;&quot;&quot;</span>
+</span><span id="Tempogram-32"><a href="#Tempogram-32"><span class="linenos"> 32</span></a>
+</span><span id="Tempogram-33"><a href="#Tempogram-33"><span class="linenos"> 33</span></a>    <span class="n">lower_bound</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="Tempogram-34"><a href="#Tempogram-34"><span class="linenos"> 34</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Lowest possible BPM value that will be considered in tempo analysis.&quot;&quot;&quot;</span>
+</span><span id="Tempogram-35"><a href="#Tempogram-35"><span class="linenos"> 35</span></a>
+</span><span id="Tempogram-36"><a href="#Tempogram-36"><span class="linenos"> 36</span></a>    <span class="n">upper_bound</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="Tempogram-37"><a href="#Tempogram-37"><span class="linenos"> 37</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Highest possible BPM value that will be considered in tempo analysis.&quot;&quot;&quot;</span>
+</span><span id="Tempogram-38"><a href="#Tempogram-38"><span class="linenos"> 38</span></a>
+</span><span id="Tempogram-39"><a href="#Tempogram-39"><span class="linenos"> 39</span></a>    <span class="n">sampling_rate</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="Tempogram-40"><a href="#Tempogram-40"><span class="linenos"> 40</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Defines the number of samples per second taken from a continuous signal to make a discrete signal.&quot;&quot;&quot;</span>
+</span><span id="Tempogram-41"><a href="#Tempogram-41"><span class="linenos"> 41</span></a>
+</span><span id="Tempogram-42"><a href="#Tempogram-42"><span class="linenos"> 42</span></a>    <span class="n">frame_length</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="Tempogram-43"><a href="#Tempogram-43"><span class="linenos"> 43</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of samples in a frame.&quot;&quot;&quot;</span>
+</span><span id="Tempogram-44"><a href="#Tempogram-44"><span class="linenos"> 44</span></a>
+</span><span id="Tempogram-45"><a href="#Tempogram-45"><span class="linenos"> 45</span></a>    <span class="n">hop_length</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="Tempogram-46"><a href="#Tempogram-46"><span class="linenos"> 46</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of samples by which we have to advance between two consecutive frames.&quot;&quot;&quot;</span>
+</span><span id="Tempogram-47"><a href="#Tempogram-47"><span class="linenos"> 47</span></a>
+</span><span id="Tempogram-48"><a href="#Tempogram-48"><span class="linenos"> 48</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">novelty_function</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+</span><span id="Tempogram-49"><a href="#Tempogram-49"><span class="linenos"> 49</span></a>                 <span class="n">similarity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+</span><span id="Tempogram-50"><a href="#Tempogram-50"><span class="linenos"> 50</span></a>                 <span class="n">number_of_dominant_values</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+</span><span id="Tempogram-51"><a href="#Tempogram-51"><span class="linenos"> 51</span></a>                 <span class="n">lower_bound</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">40</span><span class="p">,</span>
+</span><span id="Tempogram-52"><a href="#Tempogram-52"><span class="linenos"> 52</span></a>                 <span class="n">upper_bound</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span>
+</span><span id="Tempogram-53"><a href="#Tempogram-53"><span class="linenos"> 53</span></a>                 <span class="n">sampling_rate</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">SAMPLING_RATE</span><span class="p">,</span>
+</span><span id="Tempogram-54"><a href="#Tempogram-54"><span class="linenos"> 54</span></a>                 <span class="n">hop_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">HOP_LENGTH</span><span class="p">,</span>
+</span><span id="Tempogram-55"><a href="#Tempogram-55"><span class="linenos"> 55</span></a>                 <span class="n">frame_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">FRAME_LENGTH</span><span class="p">):</span>
+</span><span id="Tempogram-56"><a href="#Tempogram-56"><span class="linenos"> 56</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Tempogram-57"><a href="#Tempogram-57"><span class="linenos"> 57</span></a><span class="sd">        :param novelty_function: Novelty function of the input audio signal.</span>
+</span><span id="Tempogram-58"><a href="#Tempogram-58"><span class="linenos"> 58</span></a><span class="sd">        :param similarity: BPM tolerance that specifies which BPM values belong to the same group.</span>
+</span><span id="Tempogram-59"><a href="#Tempogram-59"><span class="linenos"> 59</span></a><span class="sd">        :param number_of_dominant_values: How many dominant BPM values should be extracted for later computations.</span>
+</span><span id="Tempogram-60"><a href="#Tempogram-60"><span class="linenos"> 60</span></a><span class="sd">        :param lower_bound: Lowest possible BPM value that will be considered.</span>
+</span><span id="Tempogram-61"><a href="#Tempogram-61"><span class="linenos"> 61</span></a><span class="sd">        :param upper_bound: Highest possible BPM value that will be considered.</span>
+</span><span id="Tempogram-62"><a href="#Tempogram-62"><span class="linenos"> 62</span></a><span class="sd">        :param sampling_rate: Defines the number of samples per second taken from a continuous signal</span>
+</span><span id="Tempogram-63"><a href="#Tempogram-63"><span class="linenos"> 63</span></a><span class="sd">         to make a discrete signal.</span>
+</span><span id="Tempogram-64"><a href="#Tempogram-64"><span class="linenos"> 64</span></a><span class="sd">        :param frame_length: Number of samples in a frame.</span>
+</span><span id="Tempogram-65"><a href="#Tempogram-65"><span class="linenos"> 65</span></a><span class="sd">        :param hop_length: Number of samples by which we have to advance between two consecutive frames.</span>
+</span><span id="Tempogram-66"><a href="#Tempogram-66"><span class="linenos"> 66</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Tempogram-67"><a href="#Tempogram-67"><span class="linenos"> 67</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">novelty_function</span> <span class="o">=</span> <span class="n">novelty_function</span>
+</span><span id="Tempogram-68"><a href="#Tempogram-68"><span class="linenos"> 68</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">similarity</span> <span class="o">=</span> <span class="n">similarity</span>
+</span><span id="Tempogram-69"><a href="#Tempogram-69"><span class="linenos"> 69</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_dominant_values</span> <span class="o">=</span> <span class="n">number_of_dominant_values</span>
+</span><span id="Tempogram-70"><a href="#Tempogram-70"><span class="linenos"> 70</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">tempogram</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="Tempogram-71"><a href="#Tempogram-71"><span class="linenos"> 71</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">bpm_values</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="Tempogram-72"><a href="#Tempogram-72"><span class="linenos"> 72</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">tempo</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="Tempogram-73"><a href="#Tempogram-73"><span class="linenos"> 73</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">=</span> <span class="n">lower_bound</span>
+</span><span id="Tempogram-74"><a href="#Tempogram-74"><span class="linenos"> 74</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span> <span class="o">=</span> <span class="n">upper_bound</span>
+</span><span id="Tempogram-75"><a href="#Tempogram-75"><span class="linenos"> 75</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">sampling_rate</span>
+</span><span id="Tempogram-76"><a href="#Tempogram-76"><span class="linenos"> 76</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">frame_length</span> <span class="o">=</span> <span class="n">frame_length</span>
+</span><span id="Tempogram-77"><a href="#Tempogram-77"><span class="linenos"> 77</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">hop_length</span> <span class="o">=</span> <span class="n">hop_length</span>
+</span><span id="Tempogram-78"><a href="#Tempogram-78"><span class="linenos"> 78</span></a>
+</span><span id="Tempogram-79"><a href="#Tempogram-79"><span class="linenos"> 79</span></a>    <span class="k">def</span> <span class="nf">_group_similar_bpms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bpm_list</span><span class="p">:</span> <span class="p">[])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span id="Tempogram-80"><a href="#Tempogram-80"><span class="linenos"> 80</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Group similar BPM values together, because there is a high chance that they represent the same</span>
+</span><span id="Tempogram-81"><a href="#Tempogram-81"><span class="linenos"> 81</span></a><span class="sd">        dominant BPM value.</span>
+</span><span id="Tempogram-82"><a href="#Tempogram-82"><span class="linenos"> 82</span></a>
+</span><span id="Tempogram-83"><a href="#Tempogram-83"><span class="linenos"> 83</span></a><span class="sd">        :param bpm_list: list of extracted dominant bpm values</span>
+</span><span id="Tempogram-84"><a href="#Tempogram-84"><span class="linenos"> 84</span></a><span class="sd">        :return: list of groups (each group is also a list and contains similar BPMs)&quot;&quot;&quot;</span>
+</span><span id="Tempogram-85"><a href="#Tempogram-85"><span class="linenos"> 85</span></a>        <span class="n">groups</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span id="Tempogram-86"><a href="#Tempogram-86"><span class="linenos"> 86</span></a>        <span class="k">for</span> <span class="n">bpm</span> <span class="ow">in</span> <span class="n">bpm_list</span><span class="p">:</span>
+</span><span id="Tempogram-87"><a href="#Tempogram-87"><span class="linenos"> 87</span></a>            <span class="n">appended</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="Tempogram-88"><a href="#Tempogram-88"><span class="linenos"> 88</span></a>            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">groups</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+</span><span id="Tempogram-89"><a href="#Tempogram-89"><span class="linenos"> 89</span></a>                <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpm</span> <span class="o">-</span> <span class="n">key</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">similarity</span><span class="p">:</span>  <span class="c1"># if a similar group already exists, add this bpm to it</span>
+</span><span id="Tempogram-90"><a href="#Tempogram-90"><span class="linenos"> 90</span></a>                    <span class="n">groups</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bpm</span><span class="p">)</span>
+</span><span id="Tempogram-91"><a href="#Tempogram-91"><span class="linenos"> 91</span></a>                    <span class="n">appended</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="Tempogram-92"><a href="#Tempogram-92"><span class="linenos"> 92</span></a>            <span class="k">if</span> <span class="ow">not</span> <span class="n">appended</span><span class="p">:</span>  <span class="c1"># otherwise create a new group for it</span>
+</span><span id="Tempogram-93"><a href="#Tempogram-93"><span class="linenos"> 93</span></a>                <span class="n">groups</span><span class="p">[</span><span class="n">bpm</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">bpm</span><span class="p">]</span>
+</span><span id="Tempogram-94"><a href="#Tempogram-94"><span class="linenos"> 94</span></a>        <span class="k">return</span> <span class="n">groups</span>
+</span><span id="Tempogram-95"><a href="#Tempogram-95"><span class="linenos"> 95</span></a>
+</span><span id="Tempogram-96"><a href="#Tempogram-96"><span class="linenos"> 96</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="Tempogram-97"><a href="#Tempogram-97"><span class="linenos"> 97</span></a>    <span class="k">def</span> <span class="nf">_get_dominant_group_avg</span><span class="p">(</span><span class="n">groups</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="Tempogram-98"><a href="#Tempogram-98"><span class="linenos"> 98</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the average value of the dominant BPM group.</span>
+</span><span id="Tempogram-99"><a href="#Tempogram-99"><span class="linenos"> 99</span></a>
+</span><span id="Tempogram-100"><a href="#Tempogram-100"><span class="linenos">100</span></a><span class="sd">        :param groups: BPM groups</span>
+</span><span id="Tempogram-101"><a href="#Tempogram-101"><span class="linenos">101</span></a><span class="sd">        :param weights: weght that each bpm has (based on how dominant its values was in the tempogram)</span>
+</span><span id="Tempogram-102"><a href="#Tempogram-102"><span class="linenos">102</span></a><span class="sd">        :return: the computed most dominant BPM</span>
+</span><span id="Tempogram-103"><a href="#Tempogram-103"><span class="linenos">103</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Tempogram-104"><a href="#Tempogram-104"><span class="linenos">104</span></a>        <span class="n">dominant_bpm</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="Tempogram-105"><a href="#Tempogram-105"><span class="linenos">105</span></a>        <span class="n">dominant_weight</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="Tempogram-106"><a href="#Tempogram-106"><span class="linenos">106</span></a>        <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">groups</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+</span><span id="Tempogram-107"><a href="#Tempogram-107"><span class="linenos">107</span></a>            <span class="n">bpm_sum</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># total sum of numbers of the group</span>
+</span><span id="Tempogram-108"><a href="#Tempogram-108"><span class="linenos">108</span></a>            <span class="n">weight</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># total weight of group</span>
+</span><span id="Tempogram-109"><a href="#Tempogram-109"><span class="linenos">109</span></a>            <span class="k">for</span> <span class="n">bpm</span> <span class="ow">in</span> <span class="n">group</span><span class="p">:</span>
+</span><span id="Tempogram-110"><a href="#Tempogram-110"><span class="linenos">110</span></a>                <span class="n">bpm_sum</span> <span class="o">+=</span> <span class="n">bpm</span> <span class="o">*</span> <span class="n">weights</span><span class="p">[</span><span class="n">bpm</span><span class="p">]</span>
+</span><span id="Tempogram-111"><a href="#Tempogram-111"><span class="linenos">111</span></a>                <span class="n">weight</span> <span class="o">+=</span> <span class="n">weights</span><span class="p">[</span><span class="n">bpm</span><span class="p">]</span>
+</span><span id="Tempogram-112"><a href="#Tempogram-112"><span class="linenos">112</span></a>            <span class="n">average</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">bpm_sum</span> <span class="o">/</span> <span class="n">weight</span><span class="p">)</span>
+</span><span id="Tempogram-113"><a href="#Tempogram-113"><span class="linenos">113</span></a>            <span class="k">if</span> <span class="n">dominant_weight</span> <span class="o">&lt;</span> <span class="n">weight</span><span class="p">:</span>
+</span><span id="Tempogram-114"><a href="#Tempogram-114"><span class="linenos">114</span></a>                <span class="n">dominant_weight</span> <span class="o">=</span> <span class="n">weight</span>
+</span><span id="Tempogram-115"><a href="#Tempogram-115"><span class="linenos">115</span></a>                <span class="n">dominant_bpm</span> <span class="o">=</span> <span class="n">average</span>
+</span><span id="Tempogram-116"><a href="#Tempogram-116"><span class="linenos">116</span></a>        <span class="k">return</span> <span class="n">dominant_bpm</span>
+</span><span id="Tempogram-117"><a href="#Tempogram-117"><span class="linenos">117</span></a>
+</span><span id="Tempogram-118"><a href="#Tempogram-118"><span class="linenos">118</span></a>    <span class="k">def</span> <span class="nf">_find_dominant_BPM</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bpm_list</span><span class="p">:</span> <span class="p">[])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="Tempogram-119"><a href="#Tempogram-119"><span class="linenos">119</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Find the most probable tempo of the song from the list of dominant BPM values.</span>
 </span><span id="Tempogram-120"><a href="#Tempogram-120"><span class="linenos">120</span></a>
-</span><span id="Tempogram-121"><a href="#Tempogram-121"><span class="linenos">121</span></a>        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">max_bpms</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_dominant_values</span><span class="p">:</span>
-</span><span id="Tempogram-122"><a href="#Tempogram-122"><span class="linenos">122</span></a>            <span class="n">max_bpm_indices</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="Tempogram-123"><a href="#Tempogram-123"><span class="linenos">123</span></a>            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_dominant_values</span><span class="p">):</span>
-</span><span id="Tempogram-124"><a href="#Tempogram-124"><span class="linenos">124</span></a>                <span class="n">max_bpm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">sum_of_tempos</span><span class="p">)</span>
-</span><span id="Tempogram-125"><a href="#Tempogram-125"><span class="linenos">125</span></a>                <span class="n">max_bpm_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">max_bpm</span><span class="p">)</span>
-</span><span id="Tempogram-126"><a href="#Tempogram-126"><span class="linenos">126</span></a>                <span class="n">sum_of_tempos</span><span class="p">[</span><span class="n">max_bpm</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span id="Tempogram-127"><a href="#Tempogram-127"><span class="linenos">127</span></a>            <span class="n">max_bpms</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bpm_values</span><span class="p">[</span><span class="n">max_bpm_indices</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">])</span>
-</span><span id="Tempogram-128"><a href="#Tempogram-128"><span class="linenos">128</span></a>
-</span><span id="Tempogram-129"><a href="#Tempogram-129"><span class="linenos">129</span></a>        <span class="k">return</span> <span class="n">max_bpms</span>
+</span><span id="Tempogram-121"><a href="#Tempogram-121"><span class="linenos">121</span></a><span class="sd">        :param bpm_list: dominant BPM values</span>
+</span><span id="Tempogram-122"><a href="#Tempogram-122"><span class="linenos">122</span></a><span class="sd">        :return: computed song BPM</span>
+</span><span id="Tempogram-123"><a href="#Tempogram-123"><span class="linenos">123</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Tempogram-124"><a href="#Tempogram-124"><span class="linenos">124</span></a>        <span class="n">weights</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span id="Tempogram-125"><a href="#Tempogram-125"><span class="linenos">125</span></a>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bpm_list</span><span class="p">)):</span>
+</span><span id="Tempogram-126"><a href="#Tempogram-126"><span class="linenos">126</span></a>            <span class="n">weights</span><span class="p">[</span><span class="n">bpm_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bpm_list</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span>  <span class="c1"># the closer to the start of the bpm_list, the higher the weight</span>
+</span><span id="Tempogram-127"><a href="#Tempogram-127"><span class="linenos">127</span></a>
+</span><span id="Tempogram-128"><a href="#Tempogram-128"><span class="linenos">128</span></a>        <span class="c1"># group similar BPMs together:</span>
+</span><span id="Tempogram-129"><a href="#Tempogram-129"><span class="linenos">129</span></a>        <span class="n">similar_bpm_groups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group_similar_bpms</span><span class="p">(</span><span class="n">bpm_list</span><span class="p">)</span>
 </span><span id="Tempogram-130"><a href="#Tempogram-130"><span class="linenos">130</span></a>
-</span><span id="Tempogram-131"><a href="#Tempogram-131"><span class="linenos">131</span></a>    <span class="k">def</span> <span class="nf">_compute_tempogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Tempogram-132"><a href="#Tempogram-132"><span class="linenos">132</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute tempogram for given novelty function.&quot;&quot;&quot;</span>
-</span><span id="Tempogram-133"><a href="#Tempogram-133"><span class="linenos">133</span></a>        <span class="k">pass</span>
-</span><span id="Tempogram-134"><a href="#Tempogram-134"><span class="linenos">134</span></a>
-</span><span id="Tempogram-135"><a href="#Tempogram-135"><span class="linenos">135</span></a>    <span class="k">def</span> <span class="nf">_analyze_tempo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Tempogram-136"><a href="#Tempogram-136"><span class="linenos">136</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze the computed tempogram to find dominant tempo.&quot;&quot;&quot;</span>
-</span><span id="Tempogram-137"><a href="#Tempogram-137"><span class="linenos">137</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tempogram</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Tempogram-138"><a href="#Tempogram-138"><span class="linenos">138</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_compute_tempogram</span><span class="p">()</span>
-</span><span id="Tempogram-139"><a href="#Tempogram-139"><span class="linenos">139</span></a>
-</span><span id="Tempogram-140"><a href="#Tempogram-140"><span class="linenos">140</span></a>    <span class="k">def</span> <span class="nf">get_tempogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-</span><span id="Tempogram-141"><a href="#Tempogram-141"><span class="linenos">141</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the computed tempogram.&quot;&quot;&quot;</span>
-</span><span id="Tempogram-142"><a href="#Tempogram-142"><span class="linenos">142</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_compute_tempogram</span><span class="p">()</span>
-</span><span id="Tempogram-143"><a href="#Tempogram-143"><span class="linenos">143</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tempogram</span>
-</span><span id="Tempogram-144"><a href="#Tempogram-144"><span class="linenos">144</span></a>
-</span><span id="Tempogram-145"><a href="#Tempogram-145"><span class="linenos">145</span></a>    <span class="k">def</span> <span class="nf">get_tempo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Tempogram-146"><a href="#Tempogram-146"><span class="linenos">146</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the most dominant tempo.&quot;&quot;&quot;</span>
-</span><span id="Tempogram-147"><a href="#Tempogram-147"><span class="linenos">147</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_compute_tempogram</span><span class="p">()</span>
-</span><span id="Tempogram-148"><a href="#Tempogram-148"><span class="linenos">148</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_tempo</span><span class="p">()</span>
-</span><span id="Tempogram-149"><a href="#Tempogram-149"><span class="linenos">149</span></a>
-</span><span id="Tempogram-150"><a href="#Tempogram-150"><span class="linenos">150</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tempo</span>
+</span><span id="Tempogram-131"><a href="#Tempogram-131"><span class="linenos">131</span></a>        <span class="c1"># find the group with the highest weight and take it&#39;s rounded average as the final dominant bpm</span>
+</span><span id="Tempogram-132"><a href="#Tempogram-132"><span class="linenos">132</span></a>        <span class="n">dominant_bpm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_dominant_group_avg</span><span class="p">(</span><span class="n">similar_bpm_groups</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+</span><span id="Tempogram-133"><a href="#Tempogram-133"><span class="linenos">133</span></a>
+</span><span id="Tempogram-134"><a href="#Tempogram-134"><span class="linenos">134</span></a>        <span class="k">return</span> <span class="n">dominant_bpm</span>
+</span><span id="Tempogram-135"><a href="#Tempogram-135"><span class="linenos">135</span></a>
+</span><span id="Tempogram-136"><a href="#Tempogram-136"><span class="linenos">136</span></a>    <span class="k">def</span> <span class="nf">_get_possible_BPM_from_tempogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+</span><span id="Tempogram-137"><a href="#Tempogram-137"><span class="linenos">137</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze the fourier tempogram and extract bpm values that are dominant.</span>
+</span><span id="Tempogram-138"><a href="#Tempogram-138"><span class="linenos">138</span></a><span class="sd">        :return: List of dominant BPM values (its size will be at least self.number_of_dominant_values)</span>
+</span><span id="Tempogram-139"><a href="#Tempogram-139"><span class="linenos">139</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Tempogram-140"><a href="#Tempogram-140"><span class="linenos">140</span></a>        <span class="c1"># get list of BPMs that the fourier tempogram represents</span>
+</span><span id="Tempogram-141"><a href="#Tempogram-141"><span class="linenos">141</span></a>        <span class="n">max_bpms</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># this list will hold BPMs with very high values - possible BPMs of the song</span>
+</span><span id="Tempogram-142"><a href="#Tempogram-142"><span class="linenos">142</span></a>        <span class="n">sum_of_tempos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tempogram</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># sum of values for all tempos in tempogram</span>
+</span><span id="Tempogram-143"><a href="#Tempogram-143"><span class="linenos">143</span></a>
+</span><span id="Tempogram-144"><a href="#Tempogram-144"><span class="linenos">144</span></a>        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">max_bpms</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_dominant_values</span><span class="p">:</span>
+</span><span id="Tempogram-145"><a href="#Tempogram-145"><span class="linenos">145</span></a>            <span class="n">max_bpm_indices</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="Tempogram-146"><a href="#Tempogram-146"><span class="linenos">146</span></a>            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_dominant_values</span><span class="p">):</span>
+</span><span id="Tempogram-147"><a href="#Tempogram-147"><span class="linenos">147</span></a>                <span class="n">max_bpm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">sum_of_tempos</span><span class="p">)</span>
+</span><span id="Tempogram-148"><a href="#Tempogram-148"><span class="linenos">148</span></a>                <span class="n">max_bpm_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">max_bpm</span><span class="p">)</span>
+</span><span id="Tempogram-149"><a href="#Tempogram-149"><span class="linenos">149</span></a>                <span class="n">sum_of_tempos</span><span class="p">[</span><span class="n">max_bpm</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="Tempogram-150"><a href="#Tempogram-150"><span class="linenos">150</span></a>            <span class="n">max_bpms</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bpm_values</span><span class="p">[</span><span class="n">max_bpm_indices</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">])</span>
+</span><span id="Tempogram-151"><a href="#Tempogram-151"><span class="linenos">151</span></a>
+</span><span id="Tempogram-152"><a href="#Tempogram-152"><span class="linenos">152</span></a>        <span class="k">return</span> <span class="n">max_bpms</span>
+</span><span id="Tempogram-153"><a href="#Tempogram-153"><span class="linenos">153</span></a>
+</span><span id="Tempogram-154"><a href="#Tempogram-154"><span class="linenos">154</span></a>    <span class="k">def</span> <span class="nf">_compute_tempogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Tempogram-155"><a href="#Tempogram-155"><span class="linenos">155</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute tempogram for given novelty function.&quot;&quot;&quot;</span>
+</span><span id="Tempogram-156"><a href="#Tempogram-156"><span class="linenos">156</span></a>        <span class="k">pass</span>
+</span><span id="Tempogram-157"><a href="#Tempogram-157"><span class="linenos">157</span></a>
+</span><span id="Tempogram-158"><a href="#Tempogram-158"><span class="linenos">158</span></a>    <span class="k">def</span> <span class="nf">_analyze_tempo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Tempogram-159"><a href="#Tempogram-159"><span class="linenos">159</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze the computed tempogram to find dominant tempo.&quot;&quot;&quot;</span>
+</span><span id="Tempogram-160"><a href="#Tempogram-160"><span class="linenos">160</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tempogram</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Tempogram-161"><a href="#Tempogram-161"><span class="linenos">161</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_compute_tempogram</span><span class="p">()</span>
+</span><span id="Tempogram-162"><a href="#Tempogram-162"><span class="linenos">162</span></a>
+</span><span id="Tempogram-163"><a href="#Tempogram-163"><span class="linenos">163</span></a>    <span class="k">def</span> <span class="nf">get_tempogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+</span><span id="Tempogram-164"><a href="#Tempogram-164"><span class="linenos">164</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the computed tempogram.&quot;&quot;&quot;</span>
+</span><span id="Tempogram-165"><a href="#Tempogram-165"><span class="linenos">165</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_compute_tempogram</span><span class="p">()</span>
+</span><span id="Tempogram-166"><a href="#Tempogram-166"><span class="linenos">166</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tempogram</span>
+</span><span id="Tempogram-167"><a href="#Tempogram-167"><span class="linenos">167</span></a>
+</span><span id="Tempogram-168"><a href="#Tempogram-168"><span class="linenos">168</span></a>    <span class="k">def</span> <span class="nf">get_tempo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="Tempogram-169"><a href="#Tempogram-169"><span class="linenos">169</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the most dominant tempo.&quot;&quot;&quot;</span>
+</span><span id="Tempogram-170"><a href="#Tempogram-170"><span class="linenos">170</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_compute_tempogram</span><span class="p">()</span>
+</span><span id="Tempogram-171"><a href="#Tempogram-171"><span class="linenos">171</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_tempo</span><span class="p">()</span>
+</span><span id="Tempogram-172"><a href="#Tempogram-172"><span class="linenos">172</span></a>
+</span><span id="Tempogram-173"><a href="#Tempogram-173"><span class="linenos">173</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tempo</span>
 </span></pre></div>
 
 
@@ -417,29 +471,42 @@ or too small values do not really make sense in terms of musical tempo analysis.
                                         <input id="Tempogram.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
-        <span class="name">Tempogram</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">novelty_function</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span>,</span><span class="param">	<span class="n">similarity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>,</span><span class="param">	<span class="n">number_of_dominant_values</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>,</span><span class="param">	<span class="n">lower_bound</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">40</span>,</span><span class="param">	<span class="n">upper_bound</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span></span>)</span>
+        <span class="name">Tempogram</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">novelty_function</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span>,</span><span class="param">	<span class="n">similarity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>,</span><span class="param">	<span class="n">number_of_dominant_values</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>,</span><span class="param">	<span class="n">lower_bound</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">40</span>,</span><span class="param">	<span class="n">upper_bound</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span>,</span><span class="param">	<span class="n">sampling_rate</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">44100</span>,</span><span class="param">	<span class="n">hop_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">512</span>,</span><span class="param">	<span class="n">frame_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2048</span></span>)</span>
 
                 <label class="view-source-button" for="Tempogram.__init__-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Tempogram.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Tempogram.__init__-38"><a href="#Tempogram.__init__-38"><span class="linenos">38</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">novelty_function</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">similarity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">number_of_dominant_values</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
-</span><span id="Tempogram.__init__-39"><a href="#Tempogram.__init__-39"><span class="linenos">39</span></a>                 <span class="n">lower_bound</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">40</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">):</span>
-</span><span id="Tempogram.__init__-40"><a href="#Tempogram.__init__-40"><span class="linenos">40</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Tempogram.__init__-41"><a href="#Tempogram.__init__-41"><span class="linenos">41</span></a><span class="sd">        :param novelty_function: Novelty function of the input audio signal.</span>
-</span><span id="Tempogram.__init__-42"><a href="#Tempogram.__init__-42"><span class="linenos">42</span></a><span class="sd">        :param similarity: BPM tolerance that specifies which BPM values belong to the same group.</span>
-</span><span id="Tempogram.__init__-43"><a href="#Tempogram.__init__-43"><span class="linenos">43</span></a><span class="sd">        :param number_of_dominant_values: How many dominant BPM values should be extracted for later computations.</span>
-</span><span id="Tempogram.__init__-44"><a href="#Tempogram.__init__-44"><span class="linenos">44</span></a><span class="sd">        :param lower_bound: Lowest possible BPM value that will be considered.</span>
-</span><span id="Tempogram.__init__-45"><a href="#Tempogram.__init__-45"><span class="linenos">45</span></a><span class="sd">        :param upper_bound: Highest possible BPM value that will be considered.</span>
-</span><span id="Tempogram.__init__-46"><a href="#Tempogram.__init__-46"><span class="linenos">46</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Tempogram.__init__-47"><a href="#Tempogram.__init__-47"><span class="linenos">47</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">novelty_function</span> <span class="o">=</span> <span class="n">novelty_function</span>
-</span><span id="Tempogram.__init__-48"><a href="#Tempogram.__init__-48"><span class="linenos">48</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">similarity</span> <span class="o">=</span> <span class="n">similarity</span>
-</span><span id="Tempogram.__init__-49"><a href="#Tempogram.__init__-49"><span class="linenos">49</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_dominant_values</span> <span class="o">=</span> <span class="n">number_of_dominant_values</span>
-</span><span id="Tempogram.__init__-50"><a href="#Tempogram.__init__-50"><span class="linenos">50</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">tempogram</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Tempogram.__init__-51"><a href="#Tempogram.__init__-51"><span class="linenos">51</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">bpm_values</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="Tempogram.__init__-52"><a href="#Tempogram.__init__-52"><span class="linenos">52</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">tempo</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Tempogram.__init__-53"><a href="#Tempogram.__init__-53"><span class="linenos">53</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">=</span> <span class="n">lower_bound</span>
-</span><span id="Tempogram.__init__-54"><a href="#Tempogram.__init__-54"><span class="linenos">54</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span> <span class="o">=</span> <span class="n">upper_bound</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Tempogram.__init__-48"><a href="#Tempogram.__init__-48"><span class="linenos">48</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">novelty_function</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+</span><span id="Tempogram.__init__-49"><a href="#Tempogram.__init__-49"><span class="linenos">49</span></a>                 <span class="n">similarity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+</span><span id="Tempogram.__init__-50"><a href="#Tempogram.__init__-50"><span class="linenos">50</span></a>                 <span class="n">number_of_dominant_values</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+</span><span id="Tempogram.__init__-51"><a href="#Tempogram.__init__-51"><span class="linenos">51</span></a>                 <span class="n">lower_bound</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">40</span><span class="p">,</span>
+</span><span id="Tempogram.__init__-52"><a href="#Tempogram.__init__-52"><span class="linenos">52</span></a>                 <span class="n">upper_bound</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span>
+</span><span id="Tempogram.__init__-53"><a href="#Tempogram.__init__-53"><span class="linenos">53</span></a>                 <span class="n">sampling_rate</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">SAMPLING_RATE</span><span class="p">,</span>
+</span><span id="Tempogram.__init__-54"><a href="#Tempogram.__init__-54"><span class="linenos">54</span></a>                 <span class="n">hop_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">HOP_LENGTH</span><span class="p">,</span>
+</span><span id="Tempogram.__init__-55"><a href="#Tempogram.__init__-55"><span class="linenos">55</span></a>                 <span class="n">frame_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">FRAME_LENGTH</span><span class="p">):</span>
+</span><span id="Tempogram.__init__-56"><a href="#Tempogram.__init__-56"><span class="linenos">56</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Tempogram.__init__-57"><a href="#Tempogram.__init__-57"><span class="linenos">57</span></a><span class="sd">        :param novelty_function: Novelty function of the input audio signal.</span>
+</span><span id="Tempogram.__init__-58"><a href="#Tempogram.__init__-58"><span class="linenos">58</span></a><span class="sd">        :param similarity: BPM tolerance that specifies which BPM values belong to the same group.</span>
+</span><span id="Tempogram.__init__-59"><a href="#Tempogram.__init__-59"><span class="linenos">59</span></a><span class="sd">        :param number_of_dominant_values: How many dominant BPM values should be extracted for later computations.</span>
+</span><span id="Tempogram.__init__-60"><a href="#Tempogram.__init__-60"><span class="linenos">60</span></a><span class="sd">        :param lower_bound: Lowest possible BPM value that will be considered.</span>
+</span><span id="Tempogram.__init__-61"><a href="#Tempogram.__init__-61"><span class="linenos">61</span></a><span class="sd">        :param upper_bound: Highest possible BPM value that will be considered.</span>
+</span><span id="Tempogram.__init__-62"><a href="#Tempogram.__init__-62"><span class="linenos">62</span></a><span class="sd">        :param sampling_rate: Defines the number of samples per second taken from a continuous signal</span>
+</span><span id="Tempogram.__init__-63"><a href="#Tempogram.__init__-63"><span class="linenos">63</span></a><span class="sd">         to make a discrete signal.</span>
+</span><span id="Tempogram.__init__-64"><a href="#Tempogram.__init__-64"><span class="linenos">64</span></a><span class="sd">        :param frame_length: Number of samples in a frame.</span>
+</span><span id="Tempogram.__init__-65"><a href="#Tempogram.__init__-65"><span class="linenos">65</span></a><span class="sd">        :param hop_length: Number of samples by which we have to advance between two consecutive frames.</span>
+</span><span id="Tempogram.__init__-66"><a href="#Tempogram.__init__-66"><span class="linenos">66</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Tempogram.__init__-67"><a href="#Tempogram.__init__-67"><span class="linenos">67</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">novelty_function</span> <span class="o">=</span> <span class="n">novelty_function</span>
+</span><span id="Tempogram.__init__-68"><a href="#Tempogram.__init__-68"><span class="linenos">68</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">similarity</span> <span class="o">=</span> <span class="n">similarity</span>
+</span><span id="Tempogram.__init__-69"><a href="#Tempogram.__init__-69"><span class="linenos">69</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_dominant_values</span> <span class="o">=</span> <span class="n">number_of_dominant_values</span>
+</span><span id="Tempogram.__init__-70"><a href="#Tempogram.__init__-70"><span class="linenos">70</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">tempogram</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="Tempogram.__init__-71"><a href="#Tempogram.__init__-71"><span class="linenos">71</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">bpm_values</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="Tempogram.__init__-72"><a href="#Tempogram.__init__-72"><span class="linenos">72</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">tempo</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="Tempogram.__init__-73"><a href="#Tempogram.__init__-73"><span class="linenos">73</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">=</span> <span class="n">lower_bound</span>
+</span><span id="Tempogram.__init__-74"><a href="#Tempogram.__init__-74"><span class="linenos">74</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span> <span class="o">=</span> <span class="n">upper_bound</span>
+</span><span id="Tempogram.__init__-75"><a href="#Tempogram.__init__-75"><span class="linenos">75</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">sampling_rate</span>
+</span><span id="Tempogram.__init__-76"><a href="#Tempogram.__init__-76"><span class="linenos">76</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">frame_length</span> <span class="o">=</span> <span class="n">frame_length</span>
+</span><span id="Tempogram.__init__-77"><a href="#Tempogram.__init__-77"><span class="linenos">77</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">hop_length</span> <span class="o">=</span> <span class="n">hop_length</span>
 </span></pre></div>
 
 
@@ -451,6 +518,10 @@ or too small values do not really make sense in terms of musical tempo analysis.
 <li><strong>number_of_dominant_values</strong>:  How many dominant BPM values should be extracted for later computations.</li>
 <li><strong>lower_bound</strong>:  Lowest possible BPM value that will be considered.</li>
 <li><strong>upper_bound</strong>:  Highest possible BPM value that will be considered.</li>
+<li><strong>sampling_rate</strong>:  Defines the number of samples per second taken from a continuous signal
+to make a discrete signal.</li>
+<li><strong>frame_length</strong>:  Number of samples in a frame.</li>
+<li><strong>hop_length</strong>:  Number of samples by which we have to advance between two consecutive frames.</li>
 </ul>
 </div>
 
@@ -560,6 +631,45 @@ or too small values do not really make sense in terms of musical tempo analysis.
 
 
                             </div>
+                            <div id="Tempogram.sampling_rate" class="classattr">
+                                <div class="attr variable">
+            <span class="name">sampling_rate</span><span class="annotation">: int</span>
+
+        
+    </div>
+    <a class="headerlink" href="#Tempogram.sampling_rate"></a>
+    
+            <div class="docstring"><p>Defines the number of samples per second taken from a continuous signal to make a discrete signal.</p>
+</div>
+
+
+                            </div>
+                            <div id="Tempogram.frame_length" class="classattr">
+                                <div class="attr variable">
+            <span class="name">frame_length</span><span class="annotation">: int</span>
+
+        
+    </div>
+    <a class="headerlink" href="#Tempogram.frame_length"></a>
+    
+            <div class="docstring"><p>Number of samples in a frame.</p>
+</div>
+
+
+                            </div>
+                            <div id="Tempogram.hop_length" class="classattr">
+                                <div class="attr variable">
+            <span class="name">hop_length</span><span class="annotation">: int</span>
+
+        
+    </div>
+    <a class="headerlink" href="#Tempogram.hop_length"></a>
+    
+            <div class="docstring"><p>Number of samples by which we have to advance between two consecutive frames.</p>
+</div>
+
+
+                            </div>
                             <div id="Tempogram.get_tempogram" class="classattr">
                                         <input id="Tempogram.get_tempogram-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
@@ -571,10 +681,10 @@ or too small values do not really make sense in terms of musical tempo analysis.
 
     </div>
     <a class="headerlink" href="#Tempogram.get_tempogram"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Tempogram.get_tempogram-140"><a href="#Tempogram.get_tempogram-140"><span class="linenos">140</span></a>    <span class="k">def</span> <span class="nf">get_tempogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-</span><span id="Tempogram.get_tempogram-141"><a href="#Tempogram.get_tempogram-141"><span class="linenos">141</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the computed tempogram.&quot;&quot;&quot;</span>
-</span><span id="Tempogram.get_tempogram-142"><a href="#Tempogram.get_tempogram-142"><span class="linenos">142</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_compute_tempogram</span><span class="p">()</span>
-</span><span id="Tempogram.get_tempogram-143"><a href="#Tempogram.get_tempogram-143"><span class="linenos">143</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tempogram</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Tempogram.get_tempogram-163"><a href="#Tempogram.get_tempogram-163"><span class="linenos">163</span></a>    <span class="k">def</span> <span class="nf">get_tempogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+</span><span id="Tempogram.get_tempogram-164"><a href="#Tempogram.get_tempogram-164"><span class="linenos">164</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the computed tempogram.&quot;&quot;&quot;</span>
+</span><span id="Tempogram.get_tempogram-165"><a href="#Tempogram.get_tempogram-165"><span class="linenos">165</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_compute_tempogram</span><span class="p">()</span>
+</span><span id="Tempogram.get_tempogram-166"><a href="#Tempogram.get_tempogram-166"><span class="linenos">166</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tempogram</span>
 </span></pre></div>
 
 
@@ -594,12 +704,12 @@ or too small values do not really make sense in terms of musical tempo analysis.
 
     </div>
     <a class="headerlink" href="#Tempogram.get_tempo"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Tempogram.get_tempo-145"><a href="#Tempogram.get_tempo-145"><span class="linenos">145</span></a>    <span class="k">def</span> <span class="nf">get_tempo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Tempogram.get_tempo-146"><a href="#Tempogram.get_tempo-146"><span class="linenos">146</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the most dominant tempo.&quot;&quot;&quot;</span>
-</span><span id="Tempogram.get_tempo-147"><a href="#Tempogram.get_tempo-147"><span class="linenos">147</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_compute_tempogram</span><span class="p">()</span>
-</span><span id="Tempogram.get_tempo-148"><a href="#Tempogram.get_tempo-148"><span class="linenos">148</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_tempo</span><span class="p">()</span>
-</span><span id="Tempogram.get_tempo-149"><a href="#Tempogram.get_tempo-149"><span class="linenos">149</span></a>
-</span><span id="Tempogram.get_tempo-150"><a href="#Tempogram.get_tempo-150"><span class="linenos">150</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tempo</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Tempogram.get_tempo-168"><a href="#Tempogram.get_tempo-168"><span class="linenos">168</span></a>    <span class="k">def</span> <span class="nf">get_tempo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="Tempogram.get_tempo-169"><a href="#Tempogram.get_tempo-169"><span class="linenos">169</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the most dominant tempo.&quot;&quot;&quot;</span>
+</span><span id="Tempogram.get_tempo-170"><a href="#Tempogram.get_tempo-170"><span class="linenos">170</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_compute_tempogram</span><span class="p">()</span>
+</span><span id="Tempogram.get_tempo-171"><a href="#Tempogram.get_tempo-171"><span class="linenos">171</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_tempo</span><span class="p">()</span>
+</span><span id="Tempogram.get_tempo-172"><a href="#Tempogram.get_tempo-172"><span class="linenos">172</span></a>
+</span><span id="Tempogram.get_tempo-173"><a href="#Tempogram.get_tempo-173"><span class="linenos">173</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tempo</span>
 </span></pre></div>
 
 

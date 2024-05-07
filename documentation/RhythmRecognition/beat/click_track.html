@@ -62,50 +62,52 @@
 
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">import</span> <span class="nn">librosa.display</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span> <span class="nn">RhythmRecognition.constants</span> <span class="kn">import</span> <span class="o">*</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="sd">&quot;&quot;&quot;Click track generator.&quot;&quot;&quot;</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="sd">&quot;&quot;&quot;Click track generator.&quot;&quot;&quot;</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="k">def</span> <span class="nf">shift_click_track</span><span class="p">(</span><span class="n">len_frames</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">click_track</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">time_shift</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Shift click track by specified time shift.&quot;&quot;&quot;</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="c1"># Pad the click track with zeros to align with the song</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="n">padded_click</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">click_track</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time_shift</span> <span class="o">*</span> <span class="n">SAMPLING_RATE</span><span class="p">),</span> <span class="mi">0</span><span class="p">))</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="c1"># Ensure both signals have the same length</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">min_length</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">len_frames</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">padded_click</span><span class="p">))</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="n">padded_click</span> <span class="o">=</span> <span class="n">padded_click</span><span class="p">[:</span><span class="n">min_length</span><span class="p">]</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="k">return</span> <span class="n">padded_click</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="k">def</span> <span class="nf">shift_click_track</span><span class="p">(</span><span class="n">len_frames</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">click_track</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">time_shift</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Shift click track by specified time shift.&quot;&quot;&quot;</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="c1"># Pad the click track with zeros to align with the song</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">padded_click</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">click_track</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time_shift</span> <span class="o">*</span> <span class="n">SAMPLING_RATE</span><span class="p">),</span> <span class="mi">0</span><span class="p">))</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="c1"># Ensure both signals have the same length</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">min_length</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">len_frames</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">padded_click</span><span class="p">))</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">padded_click</span> <span class="o">=</span> <span class="n">padded_click</span><span class="p">[:</span><span class="n">min_length</span><span class="p">]</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="k">return</span> <span class="n">padded_click</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="k">def</span> <span class="nf">get_click_times_sec</span><span class="p">(</span><span class="n">tempo</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get click times in seconds</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="sd">    :param tempo: Tempo in BPM.</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">    :param duration: Duration in seconds.</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="sd">    :return: Click times (in seconds).</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="n">interval</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">/</span> <span class="n">tempo</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="n">curr_time</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="n">click_times_arr</span> <span class="o">=</span> <span class="p">[</span><span class="n">curr_time</span><span class="p">]</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>    <span class="k">while</span> <span class="n">curr_time</span> <span class="o">&lt;</span> <span class="n">duration</span><span class="p">:</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>        <span class="n">curr_time</span> <span class="o">+=</span> <span class="n">interval</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>        <span class="n">click_times_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_time</span><span class="p">)</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">click_times_arr</span><span class="p">)</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="k">def</span> <span class="nf">get_click_times_sec</span><span class="p">(</span><span class="n">tempo</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get click times in seconds</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">    :param tempo: Tempo in BPM.</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="sd">    :param duration: Duration in seconds.</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">    :return: Click times (in seconds).</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="n">interval</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">/</span> <span class="n">tempo</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="n">curr_time</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="n">click_times_arr</span> <span class="o">=</span> <span class="p">[</span><span class="n">curr_time</span><span class="p">]</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="k">while</span> <span class="n">curr_time</span> <span class="o">&lt;</span> <span class="n">duration</span><span class="p">:</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>        <span class="n">curr_time</span> <span class="o">+=</span> <span class="n">interval</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>        <span class="n">click_times_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_time</span><span class="p">)</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">click_times_arr</span><span class="p">)</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>
 </span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="k">def</span> <span class="nf">get_click_times_frames</span><span class="p">(</span><span class="n">tempo</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get click times in frames.</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">    :param tempo: Tempo in BPM.</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="sd">    :param duration: Duration in seconds.</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">    :return: Click times (in frames).</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="n">click_times_sec</span> <span class="o">=</span> <span class="n">get_click_times_sec</span><span class="p">(</span><span class="n">tempo</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="n">frames</span> <span class="o">=</span> <span class="n">librosa</span><span class="o">.</span><span class="n">time_to_frames</span><span class="p">(</span><span class="n">click_times_sec</span><span class="p">,</span> <span class="n">sr</span><span class="o">=</span><span class="n">SAMPLING_RATE</span><span class="p">,</span> <span class="n">hop_length</span><span class="o">=</span><span class="n">HOP_LENGTH</span><span class="p">)</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="k">return</span> <span class="n">frames</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="k">def</span> <span class="nf">get_click_times_frames</span><span class="p">(</span><span class="n">tempo</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">hop_length</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get click times in frames.</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">    :param tempo: Tempo in BPM.</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">    :param duration: Duration in seconds.</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="sd">    :param sampling_rate: Defines the number of samples per second taken from a continuous signal</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">     to make a discrete signal.</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="sd">    :param hop_length: Number of samples by which we have to advance between two consecutive frames.</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="sd">    :return: Click times (in frames).</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="n">click_times_sec</span> <span class="o">=</span> <span class="n">get_click_times_sec</span><span class="p">(</span><span class="n">tempo</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="n">frames</span> <span class="o">=</span> <span class="n">librosa</span><span class="o">.</span><span class="n">time_to_frames</span><span class="p">(</span><span class="n">click_times_sec</span><span class="p">,</span> <span class="n">sr</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">hop_length</span><span class="o">=</span><span class="n">hop_length</span><span class="p">)</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>    <span class="k">return</span> <span class="n">frames</span>
 </span></pre></div>
 
 
@@ -121,16 +123,16 @@
 
     </div>
     <a class="headerlink" href="#shift_click_track"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="shift_click_track-9"><a href="#shift_click_track-9"><span class="linenos"> 9</span></a><span class="k">def</span> <span class="nf">shift_click_track</span><span class="p">(</span><span class="n">len_frames</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">click_track</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">time_shift</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-</span><span id="shift_click_track-10"><a href="#shift_click_track-10"><span class="linenos">10</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Shift click track by specified time shift.&quot;&quot;&quot;</span>
-</span><span id="shift_click_track-11"><a href="#shift_click_track-11"><span class="linenos">11</span></a>
-</span><span id="shift_click_track-12"><a href="#shift_click_track-12"><span class="linenos">12</span></a>    <span class="c1"># Pad the click track with zeros to align with the song</span>
-</span><span id="shift_click_track-13"><a href="#shift_click_track-13"><span class="linenos">13</span></a>    <span class="n">padded_click</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">click_track</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time_shift</span> <span class="o">*</span> <span class="n">SAMPLING_RATE</span><span class="p">),</span> <span class="mi">0</span><span class="p">))</span>
-</span><span id="shift_click_track-14"><a href="#shift_click_track-14"><span class="linenos">14</span></a>
-</span><span id="shift_click_track-15"><a href="#shift_click_track-15"><span class="linenos">15</span></a>    <span class="c1"># Ensure both signals have the same length</span>
-</span><span id="shift_click_track-16"><a href="#shift_click_track-16"><span class="linenos">16</span></a>    <span class="n">min_length</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">len_frames</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">padded_click</span><span class="p">))</span>
-</span><span id="shift_click_track-17"><a href="#shift_click_track-17"><span class="linenos">17</span></a>    <span class="n">padded_click</span> <span class="o">=</span> <span class="n">padded_click</span><span class="p">[:</span><span class="n">min_length</span><span class="p">]</span>
-</span><span id="shift_click_track-18"><a href="#shift_click_track-18"><span class="linenos">18</span></a>    <span class="k">return</span> <span class="n">padded_click</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="shift_click_track-8"><a href="#shift_click_track-8"><span class="linenos"> 8</span></a><span class="k">def</span> <span class="nf">shift_click_track</span><span class="p">(</span><span class="n">len_frames</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">click_track</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">time_shift</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+</span><span id="shift_click_track-9"><a href="#shift_click_track-9"><span class="linenos"> 9</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Shift click track by specified time shift.&quot;&quot;&quot;</span>
+</span><span id="shift_click_track-10"><a href="#shift_click_track-10"><span class="linenos">10</span></a>
+</span><span id="shift_click_track-11"><a href="#shift_click_track-11"><span class="linenos">11</span></a>    <span class="c1"># Pad the click track with zeros to align with the song</span>
+</span><span id="shift_click_track-12"><a href="#shift_click_track-12"><span class="linenos">12</span></a>    <span class="n">padded_click</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">click_track</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time_shift</span> <span class="o">*</span> <span class="n">SAMPLING_RATE</span><span class="p">),</span> <span class="mi">0</span><span class="p">))</span>
+</span><span id="shift_click_track-13"><a href="#shift_click_track-13"><span class="linenos">13</span></a>
+</span><span id="shift_click_track-14"><a href="#shift_click_track-14"><span class="linenos">14</span></a>    <span class="c1"># Ensure both signals have the same length</span>
+</span><span id="shift_click_track-15"><a href="#shift_click_track-15"><span class="linenos">15</span></a>    <span class="n">min_length</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">len_frames</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">padded_click</span><span class="p">))</span>
+</span><span id="shift_click_track-16"><a href="#shift_click_track-16"><span class="linenos">16</span></a>    <span class="n">padded_click</span> <span class="o">=</span> <span class="n">padded_click</span><span class="p">[:</span><span class="n">min_length</span><span class="p">]</span>
+</span><span id="shift_click_track-17"><a href="#shift_click_track-17"><span class="linenos">17</span></a>    <span class="k">return</span> <span class="n">padded_click</span>
 </span></pre></div>
 
 
@@ -150,21 +152,21 @@
 
     </div>
     <a class="headerlink" href="#get_click_times_sec"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="get_click_times_sec-21"><a href="#get_click_times_sec-21"><span class="linenos">21</span></a><span class="k">def</span> <span class="nf">get_click_times_sec</span><span class="p">(</span><span class="n">tempo</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-</span><span id="get_click_times_sec-22"><a href="#get_click_times_sec-22"><span class="linenos">22</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get click times in seconds</span>
-</span><span id="get_click_times_sec-23"><a href="#get_click_times_sec-23"><span class="linenos">23</span></a>
-</span><span id="get_click_times_sec-24"><a href="#get_click_times_sec-24"><span class="linenos">24</span></a><span class="sd">    :param tempo: Tempo in BPM.</span>
-</span><span id="get_click_times_sec-25"><a href="#get_click_times_sec-25"><span class="linenos">25</span></a><span class="sd">    :param duration: Duration in seconds.</span>
-</span><span id="get_click_times_sec-26"><a href="#get_click_times_sec-26"><span class="linenos">26</span></a><span class="sd">    :return: Click times (in seconds).</span>
-</span><span id="get_click_times_sec-27"><a href="#get_click_times_sec-27"><span class="linenos">27</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="get_click_times_sec-28"><a href="#get_click_times_sec-28"><span class="linenos">28</span></a>    <span class="n">interval</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">/</span> <span class="n">tempo</span>
-</span><span id="get_click_times_sec-29"><a href="#get_click_times_sec-29"><span class="linenos">29</span></a>    <span class="n">curr_time</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span id="get_click_times_sec-30"><a href="#get_click_times_sec-30"><span class="linenos">30</span></a>    <span class="n">click_times_arr</span> <span class="o">=</span> <span class="p">[</span><span class="n">curr_time</span><span class="p">]</span>
-</span><span id="get_click_times_sec-31"><a href="#get_click_times_sec-31"><span class="linenos">31</span></a>    <span class="k">while</span> <span class="n">curr_time</span> <span class="o">&lt;</span> <span class="n">duration</span><span class="p">:</span>
-</span><span id="get_click_times_sec-32"><a href="#get_click_times_sec-32"><span class="linenos">32</span></a>        <span class="n">curr_time</span> <span class="o">+=</span> <span class="n">interval</span>
-</span><span id="get_click_times_sec-33"><a href="#get_click_times_sec-33"><span class="linenos">33</span></a>        <span class="n">click_times_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_time</span><span class="p">)</span>
-</span><span id="get_click_times_sec-34"><a href="#get_click_times_sec-34"><span class="linenos">34</span></a>
-</span><span id="get_click_times_sec-35"><a href="#get_click_times_sec-35"><span class="linenos">35</span></a>    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">click_times_arr</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_click_times_sec-20"><a href="#get_click_times_sec-20"><span class="linenos">20</span></a><span class="k">def</span> <span class="nf">get_click_times_sec</span><span class="p">(</span><span class="n">tempo</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+</span><span id="get_click_times_sec-21"><a href="#get_click_times_sec-21"><span class="linenos">21</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get click times in seconds</span>
+</span><span id="get_click_times_sec-22"><a href="#get_click_times_sec-22"><span class="linenos">22</span></a>
+</span><span id="get_click_times_sec-23"><a href="#get_click_times_sec-23"><span class="linenos">23</span></a><span class="sd">    :param tempo: Tempo in BPM.</span>
+</span><span id="get_click_times_sec-24"><a href="#get_click_times_sec-24"><span class="linenos">24</span></a><span class="sd">    :param duration: Duration in seconds.</span>
+</span><span id="get_click_times_sec-25"><a href="#get_click_times_sec-25"><span class="linenos">25</span></a><span class="sd">    :return: Click times (in seconds).</span>
+</span><span id="get_click_times_sec-26"><a href="#get_click_times_sec-26"><span class="linenos">26</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="get_click_times_sec-27"><a href="#get_click_times_sec-27"><span class="linenos">27</span></a>    <span class="n">interval</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">/</span> <span class="n">tempo</span>
+</span><span id="get_click_times_sec-28"><a href="#get_click_times_sec-28"><span class="linenos">28</span></a>    <span class="n">curr_time</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="get_click_times_sec-29"><a href="#get_click_times_sec-29"><span class="linenos">29</span></a>    <span class="n">click_times_arr</span> <span class="o">=</span> <span class="p">[</span><span class="n">curr_time</span><span class="p">]</span>
+</span><span id="get_click_times_sec-30"><a href="#get_click_times_sec-30"><span class="linenos">30</span></a>    <span class="k">while</span> <span class="n">curr_time</span> <span class="o">&lt;</span> <span class="n">duration</span><span class="p">:</span>
+</span><span id="get_click_times_sec-31"><a href="#get_click_times_sec-31"><span class="linenos">31</span></a>        <span class="n">curr_time</span> <span class="o">+=</span> <span class="n">interval</span>
+</span><span id="get_click_times_sec-32"><a href="#get_click_times_sec-32"><span class="linenos">32</span></a>        <span class="n">click_times_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_time</span><span class="p">)</span>
+</span><span id="get_click_times_sec-33"><a href="#get_click_times_sec-33"><span class="linenos">33</span></a>
+</span><span id="get_click_times_sec-34"><a href="#get_click_times_sec-34"><span class="linenos">34</span></a>    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">click_times_arr</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -191,22 +193,25 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">get_click_times_frames</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">tempo</span>, </span><span class="param"><span class="n">duration</span></span><span class="return-annotation">) -> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">int</span>:</span></span>
+        <span class="name">get_click_times_frames</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">tempo</span>, </span><span class="param"><span class="n">duration</span>, </span><span class="param"><span class="n">sampling_rate</span>, </span><span class="param"><span class="n">hop_length</span></span><span class="return-annotation">) -> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">int</span>:</span></span>
 
                 <label class="view-source-button" for="get_click_times_frames-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#get_click_times_frames"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="get_click_times_frames-38"><a href="#get_click_times_frames-38"><span class="linenos">38</span></a><span class="k">def</span> <span class="nf">get_click_times_frames</span><span class="p">(</span><span class="n">tempo</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="get_click_times_frames-39"><a href="#get_click_times_frames-39"><span class="linenos">39</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get click times in frames.</span>
-</span><span id="get_click_times_frames-40"><a href="#get_click_times_frames-40"><span class="linenos">40</span></a>
-</span><span id="get_click_times_frames-41"><a href="#get_click_times_frames-41"><span class="linenos">41</span></a><span class="sd">    :param tempo: Tempo in BPM.</span>
-</span><span id="get_click_times_frames-42"><a href="#get_click_times_frames-42"><span class="linenos">42</span></a><span class="sd">    :param duration: Duration in seconds.</span>
-</span><span id="get_click_times_frames-43"><a href="#get_click_times_frames-43"><span class="linenos">43</span></a><span class="sd">    :return: Click times (in frames).</span>
-</span><span id="get_click_times_frames-44"><a href="#get_click_times_frames-44"><span class="linenos">44</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="get_click_times_frames-45"><a href="#get_click_times_frames-45"><span class="linenos">45</span></a>    <span class="n">click_times_sec</span> <span class="o">=</span> <span class="n">get_click_times_sec</span><span class="p">(</span><span class="n">tempo</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span>
-</span><span id="get_click_times_frames-46"><a href="#get_click_times_frames-46"><span class="linenos">46</span></a>    <span class="n">frames</span> <span class="o">=</span> <span class="n">librosa</span><span class="o">.</span><span class="n">time_to_frames</span><span class="p">(</span><span class="n">click_times_sec</span><span class="p">,</span> <span class="n">sr</span><span class="o">=</span><span class="n">SAMPLING_RATE</span><span class="p">,</span> <span class="n">hop_length</span><span class="o">=</span><span class="n">HOP_LENGTH</span><span class="p">)</span>
-</span><span id="get_click_times_frames-47"><a href="#get_click_times_frames-47"><span class="linenos">47</span></a>    <span class="k">return</span> <span class="n">frames</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_click_times_frames-37"><a href="#get_click_times_frames-37"><span class="linenos">37</span></a><span class="k">def</span> <span class="nf">get_click_times_frames</span><span class="p">(</span><span class="n">tempo</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">hop_length</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="get_click_times_frames-38"><a href="#get_click_times_frames-38"><span class="linenos">38</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get click times in frames.</span>
+</span><span id="get_click_times_frames-39"><a href="#get_click_times_frames-39"><span class="linenos">39</span></a>
+</span><span id="get_click_times_frames-40"><a href="#get_click_times_frames-40"><span class="linenos">40</span></a><span class="sd">    :param tempo: Tempo in BPM.</span>
+</span><span id="get_click_times_frames-41"><a href="#get_click_times_frames-41"><span class="linenos">41</span></a><span class="sd">    :param duration: Duration in seconds.</span>
+</span><span id="get_click_times_frames-42"><a href="#get_click_times_frames-42"><span class="linenos">42</span></a><span class="sd">    :param sampling_rate: Defines the number of samples per second taken from a continuous signal</span>
+</span><span id="get_click_times_frames-43"><a href="#get_click_times_frames-43"><span class="linenos">43</span></a><span class="sd">     to make a discrete signal.</span>
+</span><span id="get_click_times_frames-44"><a href="#get_click_times_frames-44"><span class="linenos">44</span></a><span class="sd">    :param hop_length: Number of samples by which we have to advance between two consecutive frames.</span>
+</span><span id="get_click_times_frames-45"><a href="#get_click_times_frames-45"><span class="linenos">45</span></a><span class="sd">    :return: Click times (in frames).</span>
+</span><span id="get_click_times_frames-46"><a href="#get_click_times_frames-46"><span class="linenos">46</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="get_click_times_frames-47"><a href="#get_click_times_frames-47"><span class="linenos">47</span></a>    <span class="n">click_times_sec</span> <span class="o">=</span> <span class="n">get_click_times_sec</span><span class="p">(</span><span class="n">tempo</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span>
+</span><span id="get_click_times_frames-48"><a href="#get_click_times_frames-48"><span class="linenos">48</span></a>    <span class="n">frames</span> <span class="o">=</span> <span class="n">librosa</span><span class="o">.</span><span class="n">time_to_frames</span><span class="p">(</span><span class="n">click_times_sec</span><span class="p">,</span> <span class="n">sr</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">hop_length</span><span class="o">=</span><span class="n">hop_length</span><span class="p">)</span>
+</span><span id="get_click_times_frames-49"><a href="#get_click_times_frames-49"><span class="linenos">49</span></a>    <span class="k">return</span> <span class="n">frames</span>
 </span></pre></div>
 
 
@@ -217,6 +222,9 @@
 <ul>
 <li><strong>tempo</strong>:  Tempo in BPM.</li>
 <li><strong>duration</strong>:  Duration in seconds.</li>
+<li><strong>sampling_rate</strong>:  Defines the number of samples per second taken from a continuous signal
+to make a discrete signal.</li>
+<li><strong>hop_length</strong>:  Number of samples by which we have to advance between two consecutive frames.</li>
 </ul>
 
 <h6 id="returns">Returns</h6>
