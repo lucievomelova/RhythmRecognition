@@ -14,7 +14,7 @@ python -m pip install -r requirements.txt
 ## Documentation and examples
 There is documentation provided for the whole package. It was generated using `pdoc` 
 which is an automatic documentation generator. It can be found in the `documentation/` directory.
-There are also jupyter notebooks showing example usages of the provided code, they are located in the `exmaples/` 
+There are also Jupyter Notebooks showing example usages of the provided code, they are located in the `examples/` 
 directory. 
 
 ## Tests
