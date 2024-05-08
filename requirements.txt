@@ -1,0 +1,6 @@
+ipython==8.12.3
+librosa==0.10.2
+matplotlib==3.8.4
+numpy==1.26.4
+pandas==2.2.2
+scipy==1.13.0
