@@ -1,11 +1,5 @@
 [
   {
-      "filename": "africa.wav",
-      "name": "Africa",
-      "artist": "Toto",
-      "tempo": 92
-  },
-  {
       "filename": "alone.wav",
       "name": "Alone",
       "artist": "Alan Walker",
@@ -54,16 +48,16 @@
       "tempo": 76
   },
   {
-      "filename": "evangeline.wav",
-      "name": "Evangeline",
-      "artist": "Matthew Sweet",
-      "tempo": 175
-  },
-  {
       "filename": "faded.wav",
       "name": "Faded",
       "artist": "Alan Walker",
       "tempo": 90
+  },
+  {
+      "filename": "fight_song.wav",
+      "name": "Fight Song",
+      "artist": "Rachel Platten",
+      "tempo": 176
   },
   {
       "filename": "firework.wav",
@@ -76,12 +70,6 @@
       "name": "Hollaback Girl",
       "artist": "Gwen Stefani",
       "tempo": 110
-  },
-  {
-      "filename": "i_ran_so_far_away.wav",
-      "name": "I Ran (So Far Away)",
-      "artist": "A Flock Of Seagulls",
-      "tempo": 146
   },
   {
       "filename": "im_still_standing.wav",
@@ -126,6 +114,12 @@
       "tempo": 160
   },
   {
+      "filename": "shape_of_you.wav",
+      "name": "Shape of You",
+      "artist": "Ed Sheeran",
+      "tempo": 96
+  },
+  {
       "filename": "spark.wav",
       "name": "Spark",
       "artist": "Vexento",
@@ -142,6 +136,12 @@
       "name": "Temple of Love",
       "artist": "The Sisters of Mercy",
       "tempo": 166
+  },
+  {
+      "filename": "the_nights.wav",
+      "name": "The Nights",
+      "artist": "Avicii",
+      "tempo": 126
   },
   {
       "filename": "thunder.wav",

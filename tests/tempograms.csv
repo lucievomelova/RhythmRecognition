@@ -1,5 +1,4 @@
 name,artist,tempo,fourier-energy,autocorrelation-energy,fourier-spectral,autocorrelation-spectral
-Africa,Toto,92,92,46,185,91
 Alone,Alan Walker,97,194,48,194,185
 Around the World,ATC,132,132,128,132,129
 Baby Shark,Pinkfong,115,115,113,115,112
@@ -7,12 +6,11 @@ Beautiful Life,Ace of Base,135,135,131,152,67
 Believer,Imagine Dragons,125,125,122,125,122
 Call Me Maybe,Carly Rae Jepsen,120,120,117,180,117
 Can't Stop the Feeling!,Justin Timberlake,113,113,111,113,111
-Don't Speak,No Doubt,76,76,100,152,75
-Evangeline,Matthew Sweet,175,175,86,175,87
+Don't Speak,No Doubt,76,75,75,152,147
 Faded,Alan Walker,90,180,88,180,89
+Fight Song,Rachel Platten,176,176,44,176,86
 Firework,Katy Perry,124,124,121,124,121
 Hollaback Girl,Gwen Stefani,110,82,72,165,72
-I Ran (So Far Away),A Flock Of Seagulls,146,147,143,146,142
 I'm Still Standing,Elton John,177,178,87,178,87
 It's My Life,Bon Jovi,120,120,59,120,117
 Love You Like a Love Song,Selena Gomez,117,117,114,117,114
@@ -20,9 +18,11 @@ Mambo No. 5,Lou Bega,174,174,86,174,167
 On My Way,"Sabrina Carpenter, Alan Walker, Farruko",170,127,42,128,42
 Seven Nation Army,The White Stripes,124,123,121,124,61
 Shake It Off,Taylor Swift,160,120,105,160,79
+Shape of You,Ed Sheeran,96,144,48,144,127
 Spark,Vexento,117,117,115,117,58
 Stereo Hearts,Gym Class Heroes,90,180,89,180,45
 Temple of Love,The Sisters of Mercy,166,166,82,166,82
+The Nights,Avicii,126,126,122,190,62
 Thunder,Imagine Dragons,168,105,55,168,42
 Thunder,"Gabry Ponte, Prezioso, LUM!X",135,135,131,135,133
 Uptown Funk,"Mark Ronson, Bruno Mars",115,115,113,115,113

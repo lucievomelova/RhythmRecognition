@@ -1,5 +1,4 @@
-Name,Artist,Score,Penalty,Score,Penalty
-Africa,Toto,no,no,no,no
+Name,Artist,score-energy,penalty-energy,score-spectral,penalty-spectral
 Alone,AlanWalker,half,yes,half,half
 Around the World,ATC,half,half,half,half
 Baby Shark,Pingfong,yes,half,yes,yes
@@ -11,6 +10,7 @@ Don't Speak,No Doubt,yes,yes,yes,yes
 Evangeline,Matthew Sweet,yes,no,yes,no
 Faded,Alan Walker,yes,yes,half,yes
 Firework,Katy Perry,yes,yes,yes,half
+Fight Song,Rachel Platten,yes,yes,yes,yes
 Hollaback Girl,Gwen Stefani,yes,yes,yes,yes
 I Ran (So Far Away),A Flock Of Seagulls,yes,yes,yes,half
 I'm Still Standing,Elton John,yes,yes,yes,yes
@@ -20,9 +20,11 @@ Mambo No. 5,Lou Bega,yes,yes,yes,yes
 On My Way,Sabrina Carpenter,yes,yes,yes,yes
 Seven Nation Army,The White Stripes,yes,no,no,half
 Shake It Off,Taylor Swift,yes,no,yes,half
+Shape of You,Ed Sheeran,half,half,yes,no
 Spark,Vexento,yes,yes,yes,yes
 Stereo Hearts,Gym Class Heroes,yes,yes,yes,yes
 Temple of Love,The Sisters of Mercy,yes,yes,yes,yes
+The Nights,Avicii,yes,yes,half,half
 Thunder,Imagine Dragons,yes,yes,yes,yes
 Thunder,Gabry Ponte,half,half,yes,yes
 Uptown Funk,Mark Ronson,yes,yes,yes,yes
