@@ -4,14 +4,8 @@ A python package for rhythm recognition in music.
 ## Installation and Usage
 The package is located in `RhythmRecognition/` directory. It was developed in Python 3.11.9.
 
-Before using the package, you need to install other necessary python modules used in the package. If you want to 
-use just the provided package, without the provided examples, run:
-```bash
-python -m pip install -r .\RhythmRecognition\requirements.txt 
-```
-This will install only the requirements needed in the package. 
-
-If you want to install packages used in the examples and tests as well, run:
+Before using the package, you need to install other necessary python packages used in the provided package. To install
+the required packages, run:
 ```bash
 python -m pip install -r .\requirements.txt
 ```
