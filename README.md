@@ -3,7 +3,7 @@ A Python package for rhythm recognition in music.
 
 ## Installation and Usage
 The package is located in `RhythmRecognition/` directory. It was developed in Python 3.11.9, which is the recommended 
-Python version for usage.
+Python version for usage. There is no guarantee that the package will work with other Python versions.
 
 To use the RhythmRecognition package, you need to install other necessary python packages. To install
 them, run the following command:
