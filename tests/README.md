@@ -5,9 +5,13 @@ This directory contains Jupyter notebooks with tests.
 There are no specific tests for onset detection. Onset detection approaches are compared by comparing the results 
 of the following steps using different onset detection approaches. 
 
+The conclusion is that both novelty functions performed well and that there is no clear winner.
+
 ## Tempo analysis
 Tempo analysis testing can be found in file `test-tempo.ipynb`. Results of these tests are in the file `tempograms.csv`. 
 This file contains the correct tempo and then calculated tempi from each combination of approaches.
+
+The Fourier tempogram performed significantly better than the autocorrelation tempogram.
 
 ## Beat detection
 Beat detection testing file is `test-beat.ipynb`. This file generates audio files from provided songs, and it adds 
@@ -19,8 +23,7 @@ Testing was done by listening to these generated files and classifying the resul
  shift was exactly half of the correct beat time shift
 * *no** - if the beat track was completely wrong
 
-The results can be found in `beat_results.csv`. The score-based approach was slightly better. As for onset detection 
-approach, energy-based novelty function gave slightly better results.
+The results can be found in `beat_results.csv`. The score-based approach worked better.
 
 ## Rhythm detection
 Rhythm detection testing file is `test-rhythm.ipynb`. This file generates audio files from provided songs, and it adds 
